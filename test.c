@@ -47,18 +47,17 @@ int main() {
         mvprintw(yAlien + 1, xAlien, " @");
 
         // Player
-        //playerMove(&xPlayer);
         mvprintw(yPlayer, xPlayer, " @"); 
         mvprintw(yPlayer + 1, xPlayer, "@@@");
 
         key = getch();
 
-        if((key == KEY_RIGHT) && (max_x)){
+        if((key == KEY_RIGHT) && (xPlayer + 6 <= max_x)){
             xPlayer++;
         }
-        else if(key == KEY_LEFT){
+        else if(key == KEY_LEFT && (xPlayer - 3 >= 0)){
             xPlayer--;
-        }  
+        }   
 
         // manda para o console, "print real"
         refresh();
