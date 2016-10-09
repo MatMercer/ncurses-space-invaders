@@ -1,0 +1,90 @@
+LABORATÓRIO DE COMPUTAÇÃO II
+Trabalho Prático Final – Semestre 2016/2
+
+O objetivo é implementar uma versão simplificada do clássico jogo conhecido como Space Invaders em modo texto (ASCII). 
+A implementação deve dispor de toda a interação do usuário (jogador) com o cenário (naves).
+
+Nossa versão de Space Invaders é composta por:
+
+*Uma nave controlada pelo jogador, onde:
+o Localiza-se na base do cenário.
+o Pode mover-se para direita ou esquerda.
+o Efetua disparos para cima ao comando do jogador.
+
+*Um conjunto de naves alienígenas que:
+o Localizam-se do topo para a base.
+o Movem-se de um lado para outro e de cima para baixo.
+o Os alienígenas da linha mais próxima da nave efetuam disparos em
+tempos aleatórios.
+o Se um alienígena é destruído, o jogador ganha 10 pontos.
+
+*Um espaço:
+Representando cenário do jogo.
+É uma matriz que contém caracteres representado os componentes do
+jogo.
+
+Os componentes do jogo são:
+A nave   @
+		@@@
+
+Os alienígenas @ @
+				@
+
+E os tiros |
+
+
+REGRAS DO JOGO PARA O TRABALHO DA DISCIPLINA
+
+As regras gerais que deverão ser implementadas pelo aluno são:
+
+Todos os componentes do jogo serão representados com o caracter ‘@’, com
+exceção do tiro, que será representado pelo caracter ‘|’;
+
+*** O jogo começa com uma nave controlada pelo jogador, e cinco fileiras de cinco alienígenas agrupados no canto superior esquerdo do espaço;
+
+*** Os tiros dos alienígenas devem ser disparados aleatoriamente pelos que estão mais a baixo do grupo;
+
+*** As velocidades dos tiros e dos movimentos para os alienígenas e para a nave devem estar sincronizadas;
+
+*** A nave só pode se mover para a esquerda ou para a direita, de acordo com os comandos do usuário dados via teclado;
+
+*** Os tiros da nave devem ser disparados quando o usuário teclar a barra de espaço do teclado;
+
+*** Os alienígenas devem se mover automaticamente e de forma conjunta, a cada intervalo de tempo. 
+Inicialmente, o movimento se realizará da esquerda para a direita. Quando o grupo de alienígenas alcançar a extremidade direita da tela, 
+todos os alienígenas devem descer uma linha da matriz do espaço e mudar o sentido de movimento (ou seja, devem passar a se mover da direta para
+esquerda). Esse processo deve ser repetido na extremidade esquerda da tela;
+
+*** Um alienígena morre com um tiro. Ao atingir um alienígena, o jogador recebe
+10 pontos;
+
+*** Se algum dos tiros dos alienígenas atingir a nave, o jogo deve ser encerrado;
+
+*** Se algum alienígena chegar a ‘tocar’ na parte inferior do espaço, ou na nave, o jogo deve ser encerrado;
+
+*** Se o jogador conseguir exterminar todos os alienígenas, o jogo será encerrado.
+
+
+O programa funcionará em um laço principal e periodicamente deverá ler os comandos do jogador via teclado. 
+Uma maneira de ler o teclado para analisar se o jogador pressionou alguma tecla é utilizar a função kbhit(). Para ler a tecla pressionada
+sem mostrá-la na tela, pode-se utilizar a função getch().
+
+
+O trabalho deverá ser realizado em duplas. Informar os componentes da dupla até o dia 18 de outubro ao professor por e-mail (augusto.nunes@ifpr.edu.br)
+
+Até o dia 30 de novembro, a dupla deverá eviar via email um arquivo zip cujo assunto deve conter os nomes dos alunos e a descrição: TrabalhoLCII-nome1nome2. 
+
+O arquivo zip deve conter:
+Uma descrição do trabalho realizado contendo a especificação completa
+das estruturas utilizadas e uma explicação de como usar o programa.
+
+Além disso, o código fonte deve ser incorporado ao relatório;
+O trabalho será obrigatoriamente apresentado durante a aula do encontro 39.
+
+Ambos membros da dupla deverão saber responder perguntas sobre qualquer trecho do código;
+
+Os seguintes itens serão considerados na avaliação do trabalho:
+* estruturação do código em módulos;
+* documentação geral do código (comentários, identação);
+* “jogabilidade” do jogo;
+* atendimento aos requisitos definidos;
