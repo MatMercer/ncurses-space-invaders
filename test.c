@@ -64,7 +64,7 @@ int main() {
             direction = 1; // Direita
             yAlien += 1;
         }
-        getch();
+        //getch();
         xAlien += direction;
     }
 
