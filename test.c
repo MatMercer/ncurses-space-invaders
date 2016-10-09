@@ -1,13 +1,12 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <ncurses.h>
 
-#define DELAY 60000
+#define DELAY 30000
 #define BORDA "*"
 
 int main() {
     int xAlien, yAlien, xPlayer, yPlayer;
-    int i, max_x, max_y, direction = 1;
+    int i, key, max_x, max_y, direction = 1;
     getmaxyx(stdscr, max_y, max_x);
 
     //Posicoes Iniciais
@@ -21,8 +20,10 @@ int main() {
 
     // printa para o buffer do ncurses, note que nao foi "renderizado" ainda;
     noecho();
+    // configuracoes
     curs_set(FALSE);
     keypad(stdscr, TRUE);
+    nodelay(stdscr,TRUE);
 
     while(1){
         clear();
@@ -41,13 +42,23 @@ int main() {
             mvprintw(max_y - 1, i, BORDA);
         }
 
-        // Aliens
+        // Aliens     
         mvprintw(yAlien, xAlien, "@ @");
         mvprintw(yAlien + 1, xAlien, " @");
 
         // Player
-        mvprintw(yPlayer, xPlayer, " @");
+        //playerMove(&xPlayer);
+        mvprintw(yPlayer, xPlayer, " @"); 
         mvprintw(yPlayer + 1, xPlayer, "@@@");
+
+        key = getch();
+
+        if((key == KEY_RIGHT) && (max_x)){
+            xPlayer++;
+        }
+        else if(key == KEY_LEFT){
+            xPlayer--;
+        }  
 
         // manda para o console, "print real"
         refresh();
@@ -64,21 +75,8 @@ int main() {
             direction = 1; // Direita
             yAlien += 1;
         }
-        //getch();
         xAlien += direction;
     }
-
-    //Esse loop n pode interferir no de cima
-    /*while(1){
-    // espera pelo input to usuario
-    key = getch();
-    switch(key){
-    case KEY_LEFT:
-    xPlayer--;
-    case KEY_RIGHT:
-    xPlayer++;
-    }
-    }*/
 
     // para o ncurses
     endwin();
