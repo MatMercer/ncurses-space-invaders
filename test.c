@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <ncurses.h>
 
 #define DELAY 60000
@@ -6,7 +7,7 @@
 
 int main() {
     int xAlien, yAlien, xPlayer, yPlayer;
-    int i, key, max_x, max_y, direction = 1;
+    int i, max_x, max_y, direction = 1;
     getmaxyx(stdscr, max_y, max_x);
 
     //Posicoes Iniciais
@@ -40,13 +41,13 @@ int main() {
             mvprintw(max_y - 1, i, BORDA);
         }
 
-        // Aliens     
+        // Aliens
         mvprintw(yAlien, xAlien, "@ @");
         mvprintw(yAlien + 1, xAlien, " @");
 
         // Player
-        mvprintw(yPlayer, xPlayer, " @"); 
-        mvprintw(yPlayer + 1, xPlayer, "@@@");  
+        mvprintw(yPlayer, xPlayer, " @");
+        mvprintw(yPlayer + 1, xPlayer, "@@@");
 
         // manda para o console, "print real"
         refresh();
@@ -55,27 +56,28 @@ int main() {
         usleep(DELAY);
 
         // Colisoes com as Bordas
-        if(xAlien + 5 == max_x){
+        if(xAlien + 5 >= max_x){
             direction = -1; // Esquerda
             yAlien += 1;
         }
-        else if(xAlien - 2 == 0){
+        else if(xAlien - 2 <= 0){
             direction = 1; // Direita
             yAlien += 1;
         }
+        getch();
         xAlien += direction;
     }
 
     //Esse loop n pode interferir no de cima
     /*while(1){
-        // espera pelo input to usuario
-        key = getch();
-        switch(key){
-            case KEY_LEFT:
-                xPlayer--;
-            case KEY_RIGHT:
-                xPlayer++;
-        }   
+    // espera pelo input to usuario
+    key = getch();
+    switch(key){
+    case KEY_LEFT:
+    xPlayer--;
+    case KEY_RIGHT:
+    xPlayer++;
+    }
     }*/
 
     // para o ncurses
