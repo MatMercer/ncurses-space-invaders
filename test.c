@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <ncurses.h>
 
 #define DELAY 30000
@@ -9,28 +10,34 @@ int main() {
     int i, key, max_x, max_y, direction = 1;
     getmaxyx(stdscr, max_y, max_x);
 
-    //Posicoes Iniciais
+    // Posicoes Iniciais
     xAlien = 2;
     yAlien = max_y + 4;
-    xPlayer = 50; //Por enquanto ta fixo, tem que ser relativo a max_x e max_y
+    xPlayer = 50; // Por enquanto ta fixo, tem que ser relativo a max_x e max_y
     yPlayer = 50;
 
-    // inicializa o ncurses
+    // Inicializa o ncurses
     initscr();
 
-    // printa para o buffer do ncurses, note que nao foi "renderizado" ainda;
+    // Configuracoes ncurses
+    // Nao printe caracteres digitados
     noecho();
-    // configuracoes
+    // Desabilite o cursor do console
     curs_set(FALSE);
+    // Leia caracteres especias como F1...F12 da maneira correta
     keypad(stdscr, TRUE);
+    // Desabilite o delay de espera para getch
     nodelay(stdscr,TRUE);
 
     while(1){
+        // Limpa o console
         clear();
+
         // Tamanho da tela recalculado a cada loop (responsivo)
         getmaxyx(stdscr, max_y, max_x);
-
+        // Score
         mvprintw(1, 2, "SCORE: XXX");
+
         // Bordas Verticais
         for(i = 3; i < max_y; i++){
             mvprintw(i, 1, BORDA);
@@ -42,12 +49,12 @@ int main() {
             mvprintw(max_y - 1, i, BORDA);
         }
 
-        // Aliens     
+        // Aliens
         mvprintw(yAlien, xAlien, "@ @");
         mvprintw(yAlien + 1, xAlien, " @");
 
         // Player
-        mvprintw(yPlayer, xPlayer, " @"); 
+        mvprintw(yPlayer, xPlayer, " @");
         mvprintw(yPlayer + 1, xPlayer, "@@@");
 
         key = getch();
@@ -57,7 +64,7 @@ int main() {
         }
         else if(key == KEY_LEFT && (xPlayer - 3 >= 0)){
             xPlayer--;
-        }   
+        }
 
         // manda para o console, "print real"
         refresh();
