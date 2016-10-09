@@ -82,6 +82,11 @@ int main() {
             yAlien += 1;
         }
         xAlien += direction;
+        
+        //Checa se o Alien esta no mesmo y do player
+        if(yAlien + 1 == yPlayer){
+            break;
+        }
     }
 
     // para o ncurses
