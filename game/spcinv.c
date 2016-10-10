@@ -30,8 +30,8 @@ void initGame() {
     // Desenha as bordas
     drawBorder();
 
-    // O player comeca no canto esquerdo
-    PLAYER_POS.x = BORDER_AREA.x1 + 2;
+    // O player comeca no meio
+    PLAYER_POS.x = BORDER_AREA.x2/2;
 }
 
 void play() {
