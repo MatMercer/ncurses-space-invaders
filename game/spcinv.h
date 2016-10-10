@@ -13,6 +13,10 @@
 #define RIGHT TRUE
 #define LEFT FALSE
 
+// Tamanho minimo da window
+#define MIN_WINX 90
+#define MIN_WINY 30
+
 /* Definicoes e construtores */
 
 // Struct de posicao

@@ -60,7 +60,8 @@ void render() {
     clear();
 
     // Tamanho da tela recalculado a cada loop (responsivo)
-    getWinSize();
+    // Por enquanto desativado, quebra o jogo
+    // getWinSize();
 
     // Renderiza os objetos do jogo
     drawBorder();
@@ -78,16 +79,24 @@ void getPressedKey() {
 void getWinSize() {
     // Tamanho da tela
     getmaxyx(stdscr, WIN_SIZE.y, WIN_SIZE.x);
+
+    // Verifica se a WIN_SIZE nao esta menor que o tamanho minimo
+    if(WIN_SIZE.x < MIN_WINX) {
+        WIN_SIZE.x = MIN_WINX;
+    }
+    if(WIN_SIZE.y < MIN_WINY) {
+        WIN_SIZE.y = MIN_WINY;
+    }
 }
 
 void drawBorder() {
     int i;
 
     // Tamanho da area da borda
-    BORDER_AREA.x1 = 1;
-    BORDER_AREA.x2 = WIN_SIZE.x - 1;
-    BORDER_AREA.y1 = 3;
-    BORDER_AREA.y2 = WIN_SIZE.y - 1;
+    BORDER_AREA.x1 = WIN_SIZE.x/2 - WIN_SIZE.x/3;
+    BORDER_AREA.x2 = WIN_SIZE.x/2 + WIN_SIZE.x/3;
+    BORDER_AREA.y1 = WIN_SIZE.y/2 - WIN_SIZE.y/3;
+    BORDER_AREA.y2 = WIN_SIZE.y/2 + WIN_SIZE.y/3;
 
     // Bordas Verticais
     for(i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++){
@@ -102,6 +111,8 @@ void drawBorder() {
     }
 }
 
+// TODO: Arrumar a pos do player eh maior que o x da tela
+// o player buga pro outro lado quando isso acontece
 void drawPlayer() {
     mvprintw(PLAYER_POS.y, PLAYER_POS.x, " @");
     mvprintw(PLAYER_POS.y + 1, PLAYER_POS.x, "@@@");
