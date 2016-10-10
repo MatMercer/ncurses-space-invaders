@@ -114,11 +114,19 @@ void playerMovement() {
     // Manda o player sempre para a parte de baixo da borda
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
 
+    // Verifica se o player nao esta fora da borda
+    if (PLAYER_POS.x + 4 > BORDER_AREA.x2) {
+        PLAYER_POS.x = BORDER_AREA.x2 - 3;
+    }
+    else if(PLAYER_POS.x < BORDER_AREA.x1) {
+        PLAYER_POS.x = BORDER_AREA.x2 + 1;
+    }
+
     // Movimenta o player para a direita ou esquerda
-    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 4 <= BORDER_AREA.x2)) {
+    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 3 < BORDER_AREA.x2)) {
         PLAYER_POS.x += 1;
     }
-    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 2 >= BORDER_AREA.x1)) {
+    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 1 > BORDER_AREA.x1)) {
         PLAYER_POS.x -= 1;
     }
 }
