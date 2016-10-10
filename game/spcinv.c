@@ -96,15 +96,13 @@ void drawBorder() {
     }
 
     // Bordas Horizontais
-    for(i = BORDER_AREA.x1; i < BORDER_AREA.x2; i++){
+    for(i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++){
         mvprintw(BORDER_AREA.y1, i, BORDA);
         mvprintw(BORDER_AREA.y2, i, BORDA);
     }
-
 }
 
 void drawPlayer() {
-    // Player
     mvprintw(PLAYER_POS.y, PLAYER_POS.x, " @");
     mvprintw(PLAYER_POS.y + 1, PLAYER_POS.x, "@@@");
 }
@@ -117,10 +115,10 @@ void playerMovement() {
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
 
     // Movimenta o player para a direita ou esquerda
-    if(PRESSED_KEY == KEY_RIGHT) {
+    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 6 <= WIN_SIZE.x)) {
         PLAYER_POS.x += 1;
     }
-    else if(PRESSED_KEY == KEY_LEFT) {
+    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 3 >= 0)) {
         PLAYER_POS.x -= 1;
     }
 }
