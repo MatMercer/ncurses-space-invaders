@@ -115,10 +115,10 @@ void playerMovement() {
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
 
     // Movimenta o player para a direita ou esquerda
-    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 6 <= WIN_SIZE.x)) {
+    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 4 <= BORDER_AREA.x2)) {
         PLAYER_POS.x += 1;
     }
-    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 3 >= 0)) {
+    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 2 >= BORDER_AREA.x1)) {
         PLAYER_POS.x -= 1;
     }
 }
