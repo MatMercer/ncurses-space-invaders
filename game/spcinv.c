@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <ncurses.h>
 
 #include "spcinv.h"
 
 void initGame() {
+    // Variaveis de loop
+    int i, j;
+
     // Inicializa o ncurses
     initscr();
 
@@ -29,6 +33,22 @@ void initGame() {
 
     // Desenha as bordas
     drawBorder();
+
+    //TODO: Transformar todos esses 5 em 2 contantes, ALIEN_ROWS e ALIEN_COLUMNS
+    //TODO: Colocar o codigo abaixo em uma funcao chamada initAliens()
+    // Aloca os aliens
+    ALIENS_POS = calloc(5, sizeof(vec2*));
+    for(i = 0; i < 5; i++) {
+        ALIENS_POS[i] = calloc(5, sizeof(vec2));
+    }
+
+    // Coloca os aliens na posicao inicial
+    for(i = 0; i < 5; i++) {
+        for(j = 0; j < 5; j++) {
+            ALIENS_POS[i][j].x = 1 + BORDER_AREA.x1 + (3 * i);
+            ALIENS_POS[i][j].y = 1 + BORDER_AREA.y1 + (2 * j);
+        }
+    }
 
     // O player comeca no meio
     PLAYER_POS.x = WIN_SIZE.x/2;
@@ -119,6 +139,14 @@ void drawPlayer() {
 }
 
 void drawAliens() {
+    int i, j;
+
+    for(i = 0; i < 5; i++) {
+        for(j = 0; j < 5; j++) {
+            mvprintw(ALIENS_POS[i][j].y, ALIENS_POS[i][j].x, "@ @");
+            mvprintw(ALIENS_POS[i][j].y + 1, ALIENS_POS[i][j].x, " @");
+        }
+    }
 }
 
 void playerMovement() {
