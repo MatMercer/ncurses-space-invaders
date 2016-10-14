@@ -15,7 +15,11 @@
 
 // Tamanho minimo da window
 #define MIN_WINX 90
-#define MIN_WINY 30
+#define MIN_WINY 60
+
+//Aliens
+#define ALIENS_ROWS 5
+#define ALIENS_COLUMNS 5
 
 /* Definicoes e construtores */
 
@@ -35,6 +39,9 @@ typedef struct areas {
 
 // Inicia o jogo, configurando as posicoes inicias e o ncurses
 void initGame();
+
+// Inicializa a matriz dos aliens
+void initAliens();
 
 // Comeca o loop do jogo
 // Chama a funcao getPressedKey()
@@ -72,9 +79,6 @@ void drawBorder();
 
 // Desenha uma matriz de aliens
 void drawAliens();
-
-// Desenha um alien na posicao dada
-void drawAlien();
 
 // Desenha um player na posicao dada
 void drawPlayer();
