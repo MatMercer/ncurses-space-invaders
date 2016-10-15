@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <ncurses.h>
-
 #include "spcinv.h"
 
 void initGame() {
@@ -22,8 +17,13 @@ void initGame() {
     // Comeca a contagem do GLOBALTIME
     GLOBALTIME = 0;
 
+    // Movimento dos aliens começa para a direita
+    ALIEN_DIRECTION = RIGHT;
+
     // Jogo nao esta em gameover
     GAME_STATUS = TRUE;
+
+    SCORE = 0;
 
     // Pega o tamanho da tela
     getWinSize();
@@ -37,10 +37,10 @@ void initGame() {
     PLAYER_POS.x = WIN_SIZE.x/2;
 }
 
-void initAliens(){
+void initAliens() {
     // Variaveis de loop
     int i, j;
-    
+
     // Aloca os aliens
     ALIENS_POS = calloc(ALIENS_ROWS, sizeof(vec2*));
     for(i = 0; i < ALIENS_ROWS; i++) {
@@ -64,8 +64,10 @@ void play() {
 
         // Movimenta o jogo
         playerMovement();
-        aliensMovement();
 
+        if(GLOBALTIME % 5 == 0)
+            aliensMovement();
+            
         // Renderiza
         render();
 
@@ -81,6 +83,9 @@ void render() {
     // Limpa o console
     clear();
 
+    // Contagem de Pontos
+    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "SCORE: %u", SCORE);
+
     // Tamanho da tela recalculado a cada loop (responsivo)
     // Por enquanto desativado, quebra o jogo
     // getWinSize();
@@ -88,6 +93,7 @@ void render() {
     // Renderiza os objetos do jogo
     drawBorder();
     drawPlayer();
+
     drawAliens();
 
     // Manda para o console
@@ -121,13 +127,13 @@ void drawBorder() {
     BORDER_AREA.y2 = WIN_SIZE.y/2 + WIN_SIZE.y/3;
 
     // Bordas Verticais
-    for(i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++){
+    for(i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++) {
         mvprintw(i, BORDER_AREA.x1, BORDA);
         mvprintw(i, BORDER_AREA.x2, BORDA);
     }
 
     // Bordas Horizontais
-    for(i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++){
+    for(i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++) {
         mvprintw(BORDER_AREA.y1, i, BORDA);
         mvprintw(BORDER_AREA.y2, i, BORDA);
     }
@@ -156,7 +162,7 @@ void playerMovement() {
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
 
     // Verifica se o player nao esta fora da borda
-    if (PLAYER_POS.x + 4 > BORDER_AREA.x2) {
+    if(PLAYER_POS.x + 4 > BORDER_AREA.x2) {
         PLAYER_POS.x = BORDER_AREA.x2 - 3;
     }
     else if(PLAYER_POS.x < BORDER_AREA.x1) {
@@ -173,4 +179,26 @@ void playerMovement() {
 }
 
 void aliensMovement() {
+    // Variaveis de loop
+    int i, j, aux;
+
+    //BUG: toda a matriz deve mover-se de forma uniforme.
+
+    for(i = 0; i < ALIENS_ROWS; i++) {
+        for(j = 0; j < ALIENS_COLUMNS; j++) {
+            
+            //Movimenta a matriz
+            ALIENS_POS[i][j].x += ALIEN_DIRECTION;
+
+            // Verifica colisoes com as bordas
+            if(ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
+                ALIEN_DIRECTION = LEFT;
+                ALIENS_POS[i][j].y += 1;
+            }
+            else if(ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
+                ALIEN_DIRECTION = RIGHT;
+                ALIENS_POS[i][j].y += 1;
+            }
+        }
+    }
 }

@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <ncurses.h>
 #include <stdbool.h>
 
 /* Constantes */
@@ -7,11 +11,7 @@
 
 // Como tudo deve ser printado
 #define BORDA "*"
-#define NAVES "@"
-
-// Definicao de direita e esquerda para tornar o codigo mais legivel
-#define RIGHT TRUE
-#define LEFT FALSE
+#define NAVES "@" //not used
 
 // Tamanho minimo da window
 #define MIN_WINX 90
@@ -20,6 +20,10 @@
 //Aliens
 #define ALIENS_ROWS 5
 #define ALIENS_COLUMNS 5
+
+//Macro para os movimentos dos aliens
+#define RIGHT 1
+#define LEFT -1
 
 /* Definicoes e construtores */
 
@@ -104,7 +108,7 @@ vec2 **ALIENS_POS;
 unsigned int SCORE;
 
 // Direcao dos aliens, muda de acordo com as colisoes
-bool ALIEN_DIRECTION;
+int ALIEN_DIRECTION;
 
 // True para normal, false para gameover
 bool GAME_STATUS;
