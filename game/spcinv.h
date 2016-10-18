@@ -21,9 +21,11 @@
 #define ALIENS_ROWS 5
 #define ALIENS_COLUMNS 5
 
-//Macro para os movimentos dos aliens
+//Macro para a direcao dos movimentos
 #define RIGHT 1
 #define LEFT -1
+#define UP -2
+#define DOWN 2
 
 /* Definicoes e construtores */
 

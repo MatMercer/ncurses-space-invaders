@@ -1,5 +1,6 @@
 #include "spcinv.h"
 
+
 void initGame() {
     // Inicializa o ncurses
     initscr();
@@ -54,6 +55,9 @@ void initAliens() {
             ALIENS_POS[i][j].y = 1 + BORDER_AREA.y1 + (2 * j);
         }
     }
+
+    // Manda eles andarem para a direita
+    ALIEN_DIRECTION = RIGHT;
 }
 
 void play() {
@@ -67,7 +71,7 @@ void play() {
 
         if(GLOBALTIME % 5 == 0)
             aliensMovement();
-            
+
         // Renderiza
         render();
 
@@ -180,24 +184,43 @@ void playerMovement() {
 
 void aliensMovement() {
     // Variaveis de loop
-    int i, j, aux;
+    int i, j;
 
-    //BUG: toda a matriz deve mover-se de forma uniforme.
-
+    //TODO: Se um alien estiver colidindo com o (y2 - a altura do player) terminar o jogo
+    // Movimentacao dos aliens
     for(i = 0; i < ALIENS_ROWS; i++) {
         for(j = 0; j < ALIENS_COLUMNS; j++) {
-            
-            //Movimenta a matriz
-            ALIENS_POS[i][j].x += ALIEN_DIRECTION;
-
-            // Verifica colisoes com as bordas
-            if(ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
-                ALIEN_DIRECTION = LEFT;
-                ALIENS_POS[i][j].y += 1;
+            if(ALIEN_DIRECTION == LEFT || ALIEN_DIRECTION == RIGHT) {
+                ALIENS_POS[i][j].x += ALIEN_DIRECTION;
             }
+            else if(ALIEN_DIRECTION == UP || ALIEN_DIRECTION == DOWN) {
+                ALIENS_POS[i][j].y += ALIEN_DIRECTION / 2; // como up e down eh -2 ou 2, aqui pode ser -1 ou 1
+            }
+        }
+    }
+
+    // Calcula a direcao que os aliens devem ir no proximo pass
+    for(i = 0; i < ALIENS_ROWS; i++) {
+        for(j = 0; j < ALIENS_COLUMNS; j++) {
+            // Colisao com a esquerda
+            if(ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
+                if(ALIEN_DIRECTION != DOWN) {
+                    ALIEN_DIRECTION = DOWN;
+                }
+                else {
+                    ALIEN_DIRECTION = LEFT;
+                }
+                break;
+            }
+            // Colisao com a direita
             else if(ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
-                ALIEN_DIRECTION = RIGHT;
-                ALIENS_POS[i][j].y += 1;
+                if(ALIEN_DIRECTION != DOWN) {
+                    ALIEN_DIRECTION = DOWN;
+                }
+                else {
+                    ALIEN_DIRECTION = RIGHT;
+                }
+                break;
             }
         }
     }
