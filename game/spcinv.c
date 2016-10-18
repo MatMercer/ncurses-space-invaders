@@ -18,9 +18,6 @@ void initGame() {
     // Comeca a contagem do GLOBALTIME
     GLOBALTIME = 0;
 
-    // Movimento dos aliens começa para a direita
-    ALIEN_DIRECTION = RIGHT;
-
     // Jogo nao esta em gameover
     GAME_STATUS = TRUE;
 
@@ -32,10 +29,14 @@ void initGame() {
     // Desenha as bordas
     drawBorder();
 
-    initAliens();
+    initPlayer();
 
+    initAliens();
+}
+
+void initPlayer(){
     // O player comeca no meio
-    PLAYER_POS.x = WIN_SIZE.x/2;
+    PLAYER_POS.x = WIN_SIZE.x / 2;
 }
 
 void initAliens() {
@@ -97,7 +98,6 @@ void render() {
     // Renderiza os objetos do jogo
     drawBorder();
     drawPlayer();
-
     drawAliens();
 
     // Manda para o console
@@ -186,7 +186,6 @@ void aliensMovement() {
     // Variaveis de loop
     int i, j;
 
-    //TODO: Se um alien estiver colidindo com o (y2 - a altura do player) terminar o jogo
     // Movimentacao dos aliens
     for(i = 0; i < ALIENS_ROWS; i++) {
         for(j = 0; j < ALIENS_COLUMNS; j++) {
@@ -199,10 +198,15 @@ void aliensMovement() {
         }
     }
 
-    // Calcula a direcao que os aliens devem ir no proximo pass
+    // Calcula a direcao que os aliens devem ir no proximo passo
     for(i = 0; i < ALIENS_ROWS; i++) {
         for(j = 0; j < ALIENS_COLUMNS; j++) {
-            // Colisao com a esquerda
+            //Verifica se os aliens estao no mesmo y do player
+            if(ALIENS_POS[i][j].y + 1 == PLAYER_POS.y){
+                gameOver(FALSE); // Fim de jogo - Derrota
+                break;
+            }
+            // Colisao com a borda direita
             if(ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
                 if(ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
@@ -212,7 +216,7 @@ void aliensMovement() {
                 }
                 break;
             }
-            // Colisao com a direita
+            // Colisao com a borda esquerda
             else if(ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
                 if(ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
@@ -224,4 +228,31 @@ void aliensMovement() {
             }
         }
     }
+}
+
+void gameOver(bool winner) {
+    // Encerra o jogo
+    GAME_STATUS = FALSE;
+
+    //BUGS: printf funciona mas mvprintw nao, terminal aparece no meio do jogo
+
+    if(winner) {
+        mvprintw(BORDER_AREA.y1 - 4, WIN_SIZE.x/2, "YOU WIN!");
+    }
+    else {
+        mvprintw(BORDER_AREA.y1 - 4, WIN_SIZE.x/2, "YOU LOST!");
+    }
+
+    /*if(winner) {
+        mvprintw(BORDER_AREA.y1 + 5, BORDER_AREA.x2 / 2, "YOU WIN!!!");
+    }
+    else {
+        mvprintw(BORDER_AREA.y1, BORDER_AREA.x1 + 5,      "   ___   _   __  __ ___    _____   _____ ___");
+        mvprintw(BORDER_AREA.y1 + 1, BORDER_AREA.x1 + 5,  "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
+        mvprintw(BORDER_AREA.y1 + 2, BORDER_AREA.x1 + 5,  " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
+        mvprintw(BORDER_AREA.y1 + 3, BORDER_AREA.x1 + 5,  "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+    }*/
+
+    // Finaliza Ncurses
+    endwin();
 }

@@ -7,7 +7,7 @@
 /* Constantes */
 
 // Delay de cada frame
-#define DELAY 30000
+#define DELAY 10000
 
 // Como tudo deve ser printado
 #define BORDA "*"
@@ -43,9 +43,11 @@ typedef struct areas {
     int y2;
 } area;
 
-// Inicia o jogo, configurando as posicoes inicias e o ncurses
+// Inicia o jogo e configura o ncurses
 void initGame();
 
+// Define a posicao inicial do player
+void initPlayer();
 // Inicializa a matriz dos aliens
 void initAliens();
 
