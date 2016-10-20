@@ -13,7 +13,7 @@ void initGame() {
     // Leia caracteres especias como F1...F12 da maneira correta
     keypad(stdscr, TRUE);
     // Desabilite o delay de espera para getch
-    nodelay(stdscr,TRUE);
+    nodelay(stdscr, TRUE);
 
     // Comeca a contagem do GLOBALTIME
     GLOBALTIME = 0;
@@ -29,8 +29,10 @@ void initGame() {
     // Desenha as bordas
     drawBorder();
 
+    // Inicia os players
     initPlayer();
 
+    // Inicia os aliens
     initAliens();
 }
 
@@ -69,7 +71,6 @@ void play() {
 
         // Movimenta o jogo
         playerMovement();
-
         if(GLOBALTIME % 5 == 0)
             aliensMovement();
 
@@ -236,23 +237,70 @@ void gameOver(bool winner) {
 
     //BUGS: printf funciona mas mvprintw nao, terminal aparece no meio do jogo
 
-    if(winner) {
-        mvprintw(BORDER_AREA.y1 - 4, WIN_SIZE.x/2, "YOU WIN!");
-    }
-    else {
-        mvprintw(BORDER_AREA.y1 - 4, WIN_SIZE.x/2, "YOU LOST!");
+    // Posicao da mensagem
+    vec2 gmOverMsgPos;
+    gmOverMsgPos.x = BORDER_AREA.x1 + 5;
+    gmOverMsgPos.y = BORDER_AREA.y1 + 2;
+
+    // Direcao do movimento da mensagem
+    int xMsgDir = RIGHT;
+    int yMsgDir = DOWN;
+
+    // Enquanto a tecla q nao for apertada...
+    while(PRESSED_KEY != 'q') {
+        // Pega qual tecla esta sendo pressionada no momento
+        getPressedKey();
+
+        // Limpa o console
+        clear();
+
+        // Desenha a borda
+        drawBorder();
+
+        // Desenha a mensagem de gameover
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s with %d Points! Press q to exit!", winner ? "won":"lost", SCORE);
+        mvprintw(gmOverMsgPos.y, gmOverMsgPos.x,      "   ___   _   __  __ ___    _____   _____ ___");
+        mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x,  "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
+        mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x,  " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
+        mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x,  "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+
+        // Movimenta a mensagem de gameover, verificando colisoes
+        if(GLOBALTIME % 25 == 0) {
+            // Movimenta a msg com a direcao
+            gmOverMsgPos.x += xMsgDir;
+            gmOverMsgPos.y += yMsgDir/2;
+
+            // Colisao no eixo x
+            if(gmOverMsgPos.x + 45 >= BORDER_AREA.x2) {
+                xMsgDir = LEFT;
+            }
+            else if(gmOverMsgPos.x - 1 <= BORDER_AREA.x1) {
+                xMsgDir = RIGHT;
+            }
+
+            // Colisao no eixo y
+            if(gmOverMsgPos.y + 4 >= BORDER_AREA.y2) {
+                yMsgDir = UP;
+            }
+            else if(gmOverMsgPos.y - 2 <= BORDER_AREA.y1) {
+                yMsgDir = DOWN;
+            }
+        }
+
+        // Refresh do ncurses
+        refresh();
+
+        // Incrementa o GLOBALTIME para animar a mensagem acima
+        GLOBALTIME++;
+
+        // Delay de espera
+        usleep(DELAY);
     }
 
-    /*if(winner) {
-        mvprintw(BORDER_AREA.y1 + 5, BORDER_AREA.x2 / 2, "YOU WIN!!!");
-    }
-    else {
-        mvprintw(BORDER_AREA.y1, BORDER_AREA.x1 + 5,      "   ___   _   __  __ ___    _____   _____ ___");
-        mvprintw(BORDER_AREA.y1 + 1, BORDER_AREA.x1 + 5,  "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
-        mvprintw(BORDER_AREA.y1 + 2, BORDER_AREA.x1 + 5,  " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
-        mvprintw(BORDER_AREA.y1 + 3, BORDER_AREA.x1 + 5,  "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
-    }*/
+    // Manda um '^C' simulado pro programa, sinal de interrupcao
+    kill(getpid(), SIGINT);
 
-    // Finaliza Ncurses
-    endwin();
+    // Resete a configuracao da shell para a anterior
+    //reset_shell_mode();
+    //endwin(); // endwin e reset_shell_mode nao funcionam da maneira correta, quebram o console.
 }
