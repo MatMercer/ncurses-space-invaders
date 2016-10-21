@@ -18,11 +18,11 @@
 #define MIN_WINX 90
 #define MIN_WINY 60
 
-//Aliens
+// Aliens
 #define ALIENS_ROWS 5
 #define ALIENS_COLUMNS 5
 
-//Macro para a direcao dos movimentos
+// Macro para a direcao dos movimentos
 #define RIGHT 1
 #define LEFT -1
 #define UP -2
@@ -68,15 +68,20 @@ void getWinSize();
 // ou nao. Para o ncurses apos isso
 void gameOver(bool winner);
 
-// Movementa o player, acoes baseadas em PRESSED_KEY
+// Movimenta o player, acoes baseadas em PRESSED_KEY
 // A posicao eh baseada em PLAYER_POS
 // Detecta colisoes, muda a posicao do player se necessario
-// Detecta se o jogador quer atirar
 void playerMovement();
 
-// Movementa os aliens
+// Movimenta os aliens
 // Detecta colisoes com a parede e modifica o ALIEN_DIRECTION
 void aliensMovement();
+
+// Detecta se o jogador quer atirar e desenha o projetil
+void playerShoot();
+
+// Desenha os tiros dos aliens
+void alienShoot();
 
 // Renderiza
 // Chama as funcoes draw*() a cada loop

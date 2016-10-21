@@ -29,7 +29,7 @@ void initGame() {
     // Desenha as bordas
     drawBorder();
 
-    // Inicia os players
+    // Inicia o player
     initPlayer();
 
     // Inicia os aliens
@@ -71,8 +71,14 @@ void play() {
 
         // Movimenta o jogo
         playerMovement();
-        if(GLOBALTIME % 5 == 0)
+        if(GLOBALTIME % 5 == 0) {
             aliensMovement();
+        }
+
+        // Se a tecla espaco for pressionada
+        if(PRESSED_KEY == ' ') {
+            playerShoot();
+        }
 
         // Renderiza
         render();
@@ -176,10 +182,10 @@ void playerMovement() {
 
     // Movimenta o player para a direita ou esquerda
     if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 3 < BORDER_AREA.x2)) {
-        PLAYER_POS.x += 1;
+        PLAYER_POS.x += RIGHT;
     }
     else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 1 > BORDER_AREA.x1)) {
-        PLAYER_POS.x -= 1;
+        PLAYER_POS.x += LEFT;
     }
 }
 
@@ -231,11 +237,37 @@ void aliensMovement() {
     }
 }
 
+void aliensShoot() {
+    // TODO: apenas os aliens da fileira mais baixa podem atirar, randomicamente
+}
+
+void playerShoot() {
+    // Variaveis de loop
+    int i;
+
+    // Inicia logo acima do player e sobe ate a borda superior
+    for(i = PLAYER_POS.y - 1; i >= BORDER_AREA.y1; i--) {
+        // Limpa posicao anterior do tiro, exceto se for o player
+        if(i + 1 != PLAYER_POS.y) {
+            mvprintw(i + 1, PLAYER_POS.x + 1, " ");
+        }
+        else {
+            mvprintw(i + 1, PLAYER_POS.x + 1, "@");
+        }
+        // Desenha o projetil disparado
+        mvprintw(i, PLAYER_POS.x + 1, "|");
+        
+        // Delay de espera
+        usleep(DELAY * 3);
+
+        refresh();
+    }
+    // TODO: verificar aliens atingidos
+}
+
 void gameOver(bool winner) {
     // Encerra o jogo
     GAME_STATUS = FALSE;
-
-    //BUGS: printf funciona mas mvprintw nao, terminal aparece no meio do jogo
 
     // Posicao da mensagem
     vec2 gmOverMsgPos;
@@ -258,7 +290,7 @@ void gameOver(bool winner) {
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s with %d Points! Press q to exit!", winner ? "won":"lost", SCORE);
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x,  "   You %s with %d Points! Press q to exit!", winner ? "won":"lost", SCORE);
         mvprintw(gmOverMsgPos.y, gmOverMsgPos.x,      "   ___   _   __  __ ___    _____   _____ ___");
         mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x,  "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
         mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x,  " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
@@ -300,7 +332,5 @@ void gameOver(bool winner) {
     // Manda um '^C' simulado pro programa, sinal de interrupcao
     kill(getpid(), SIGINT);
 
-    // Resete a configuracao da shell para a anterior
-    //reset_shell_mode();
-    //endwin(); // endwin e reset_shell_mode nao funcionam da maneira correta, quebram o console.
+    // endwin() e reset_shell_mode() nao funcionam da maneira correta, quebram o console.
 }
