@@ -128,3 +128,8 @@ int PRESSED_KEY;
 
 // Um timer global, eh incrementado a cada loop da funcao play()
 unsigned long int GLOBALTIME;
+
+// Usado para debug
+#ifdef DEBUG
+void drawDebug();
+#endif

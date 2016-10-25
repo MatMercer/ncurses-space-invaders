@@ -98,6 +98,11 @@ void render() {
     // Contagem de Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "SCORE: %u", SCORE);
 
+    // Debug
+#ifdef DEBUG
+    drawDebug();
+#endif
+
     // Tamanho da tela recalculado a cada loop (responsivo)
     // Por enquanto desativado, quebra o jogo
     // getWinSize();
@@ -168,6 +173,13 @@ void drawAliens() {
     }
 }
 
+#ifdef DEBUG
+void drawDebug() {
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "PLAYER POS: %d:%d | GLOBALTIME: %ld | PRESSED KEY: %d | ALIEN DIRECTION: %d", PLAYER_POS.x, PLAYER_POS.y, GLOBALTIME, PRESSED_KEY, ALIEN_DIRECTION);
+    mvprintw(BORDER_AREA.y1 - 3, BORDER_AREA.x1, "WINDOW SIZE: %d:%d | BORDER AREA: %d:%d:%d:%d | GAME STATUS: %d", WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
+}
+#endif
+
 void playerMovement() {
     // Manda o player sempre para a parte de baixo da borda
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
@@ -219,7 +231,7 @@ void aliensMovement() {
                     ALIEN_DIRECTION = DOWN;
                 }
                 else {
-                    ALIEN_DIRECTION = LEFT;
+                    ALIEN_DIRECTION = DOWN;
                 }
                 break;
             }
@@ -229,7 +241,7 @@ void aliensMovement() {
                     ALIEN_DIRECTION = DOWN;
                 }
                 else {
-                    ALIEN_DIRECTION = RIGHT;
+                    ALIEN_DIRECTION = DOWN;
                 }
                 break;
             }
@@ -256,7 +268,7 @@ void playerShoot() {
         }
         // Desenha o projetil disparado
         mvprintw(i, PLAYER_POS.x + 1, "|");
-        
+
         // Delay de espera
         usleep(DELAY * 3);
 
@@ -327,6 +339,10 @@ void gameOver(bool winner) {
 
         // Delay de espera
         usleep(DELAY);
+
+        #ifdef DEBUG
+        drawDebug();
+        #endif
     }
 
     // Manda um '^C' simulado pro programa, sinal de interrupcao
