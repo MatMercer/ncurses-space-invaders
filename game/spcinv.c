@@ -71,7 +71,7 @@ void play() {
 
         // Movimenta o jogo
         playerMovement();
-        if(GLOBALTIME % 5 == 0) {
+        if(GLOBALTIME % 20 == 0) {
             aliensMovement();
         }
 
@@ -98,8 +98,8 @@ void render() {
     // Contagem de Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "SCORE: %u", SCORE);
 
-    // Debug
 #ifdef DEBUG
+    // Debug
     drawDebug();
 #endif
 
@@ -174,8 +174,28 @@ void drawAliens() {
 }
 
 #ifdef DEBUG
+char* dirToString(int dir) {
+    switch(dir) {
+    case 1:
+        return "RIGHT";
+        break;
+    case -1:
+        return "LEFT";
+        break;
+    case 2:
+        return "DOWN";
+        break;
+    case -2:
+        return "UP";
+        break;
+    default:
+        return "UNDEFINED";
+        break;
+    }
+}
+
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "PLAYER POS: %d:%d | GLOBALTIME: %ld | PRESSED KEY: %d | ALIEN DIRECTION: %d", PLAYER_POS.x, PLAYER_POS.y, GLOBALTIME, PRESSED_KEY, ALIEN_DIRECTION);
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "PLAYER POS: %d:%d | GLOBALTIME: %ld | PRESSED KEY: %d | ALIEN DIRECTION: %s", PLAYER_POS.x, PLAYER_POS.y, GLOBALTIME, PRESSED_KEY, dirToString(ALIEN_DIRECTION));
     mvprintw(BORDER_AREA.y1 - 3, BORDER_AREA.x1, "WINDOW SIZE: %d:%d | BORDER AREA: %d:%d:%d:%d | GAME STATUS: %d", WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
 }
 #endif
@@ -231,7 +251,7 @@ void aliensMovement() {
                     ALIEN_DIRECTION = DOWN;
                 }
                 else {
-                    ALIEN_DIRECTION = DOWN;
+                    ALIEN_DIRECTION = LEFT;
                 }
                 break;
             }
@@ -241,7 +261,7 @@ void aliensMovement() {
                     ALIEN_DIRECTION = DOWN;
                 }
                 else {
-                    ALIEN_DIRECTION = DOWN;
+                    ALIEN_DIRECTION = RIGHT;
                 }
                 break;
             }
@@ -298,6 +318,11 @@ void gameOver(bool winner) {
         // Limpa o console
         clear();
 
+        // Debug
+        #ifdef DEBUG
+        drawDebug();
+        #endif
+
         // Desenha a borda
         drawBorder();
 
@@ -339,10 +364,6 @@ void gameOver(bool winner) {
 
         // Delay de espera
         usleep(DELAY);
-
-        #ifdef DEBUG
-        drawDebug();
-        #endif
     }
 
     // Manda um '^C' simulado pro programa, sinal de interrupcao

@@ -15,8 +15,8 @@
 #define NAVES "@" //not used
 
 // Tamanho minimo da window
-#define MIN_WINX 90
-#define MIN_WINY 60
+#define MIN_WINX 80
+#define MIN_WINY 30
 
 // Aliens
 #define ALIENS_ROWS 5
