@@ -37,8 +37,11 @@ void initGame() {
 }
 
 void initPlayer(){
-    // O player comeca no meio
+    // O player comeca no meio e embaixo
     PLAYER_POS.x = WIN_SIZE.x / 2;
+    PLAYER_POS.y = BORDER_AREA.y2 - 2;
+    // O laser comeca em cima do player
+    LASER_POS.y = PLAYER_POS.y - 1;
 }
 
 void initAliens() {
@@ -74,12 +77,8 @@ void play() {
         if(GLOBALTIME % 20 == 0) {
             aliensMovement();
         }
-
-        // Se a tecla espaco for pressionada
-        if(PRESSED_KEY == ' ') {
-            playerShoot();
-        }
-
+        playerShoot();
+        
         // Renderiza
         render();
 
@@ -111,6 +110,7 @@ void render() {
     drawBorder();
     drawPlayer();
     drawAliens();
+    drawLasers();
 
     // Manda para o console
     refresh();
@@ -173,6 +173,21 @@ void drawAliens() {
     }
 }
 
+void drawLasers() {
+    // Se nao estiver em cima do player
+    if(LASER_POS.y != PLAYER_POS.y - 1) {
+
+        // Limpa posicao anterior do laser
+        mvprintw(LASER_POS.y + 1, LASER_POS.x, " ");
+        // Desenha o projetil disparado
+        mvprintw(LASER_POS.y, LASER_POS.x, "|");
+    }
+    else {
+        mvprintw(LASER_POS.y + 1, LASER_POS.x, "@");
+    } 
+    
+}
+
 #ifdef DEBUG
 char* dirToString(int dir) {
     switch(dir) {
@@ -195,8 +210,9 @@ char* dirToString(int dir) {
 }
 
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "PLAYER POS: %d:%d | GLOBALTIME: %ld | PRESSED KEY: %d | ALIEN DIRECTION: %s", PLAYER_POS.x, PLAYER_POS.y, GLOBALTIME, PRESSED_KEY, dirToString(ALIEN_DIRECTION));
-    mvprintw(BORDER_AREA.y1 - 3, BORDER_AREA.x1, "WINDOW SIZE: %d:%d | BORDER AREA: %d:%d:%d:%d | GAME STATUS: %d", WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
+    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d", WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
+    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME, PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ", dirToString(ALIEN_DIRECTION), LASER_POS.x, LASER_POS.y);
 }
 #endif
 
@@ -269,32 +285,36 @@ void aliensMovement() {
     }
 }
 
+void lasersMovement() {
+    // Recebe o x da posicao que player atirou
+    LASER_POS.x = PLAYER_POS.x + 1; 
+
+    // Movimenta o laser para cima se esta dentro das bordas
+    if(LASER_POS.y > BORDER_AREA.y1) {
+        if(GLOBALTIME % 20) {
+            LASER_POS.y -= 1;
+        } 
+    }
+    else {
+        // Laser volta em cima do player
+        LASER_POS.y = PLAYER_POS.y - 1;
+        LASER_POS.x = PLAYER_POS.x + 1;
+    }  
+}
+
 void aliensShoot() {
     // TODO: apenas os aliens da fileira mais baixa podem atirar, randomicamente
+    // TODO: verificar aliens atingidos
 }
 
 void playerShoot() {
     // Variaveis de loop
     int i;
 
-    // Inicia logo acima do player e sobe ate a borda superior
-    for(i = PLAYER_POS.y - 1; i >= BORDER_AREA.y1; i--) {
-        // Limpa posicao anterior do tiro, exceto se for o player
-        if(i + 1 != PLAYER_POS.y) {
-            mvprintw(i + 1, PLAYER_POS.x + 1, " ");
-        }
-        else {
-            mvprintw(i + 1, PLAYER_POS.x + 1, "@");
-        }
-        // Desenha o projetil disparado
-        mvprintw(i, PLAYER_POS.x + 1, "|");
-
-        // Delay de espera
-        usleep(DELAY * 3);
-
-        refresh();
-    }
-    // TODO: verificar aliens atingidos
+    // Atire se o player apertar espaco
+    if(PRESSED_KEY = ' ') {
+        lasersMovement();
+    }  
 }
 
 void gameOver(bool winner) {

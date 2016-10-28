@@ -28,6 +28,9 @@
 #define UP -2
 #define DOWN 2
 
+// Define a quantidade de lasers no jogo
+//#define MAX_LASERS 2
+
 /* Definicoes e construtores */
 
 // Struct de posicao
@@ -77,11 +80,13 @@ void playerMovement();
 // Detecta colisoes com a parede e modifica o ALIEN_DIRECTION
 void aliensMovement();
 
-// Detecta se o jogador quer atirar e desenha o projetil
+// Detecta se o jogador quer atirar e chama lasersMovement()
 void playerShoot();
 
 // Desenha os tiros dos aliens
 void alienShoot();
+
+void lasersMovement();
 
 // Renderiza
 // Chama as funcoes draw*() a cada loop
@@ -96,6 +101,9 @@ void drawAliens();
 
 // Desenha um player na posicao dada
 void drawPlayer();
+
+// Desenha os lasers em suas posicoes
+void drawLasers();
 
 /* Variaveis globais */
 
@@ -113,6 +121,9 @@ vec2 PLAYER_POS;
 
 // Posicao dos aliens
 vec2 **ALIENS_POS;
+
+// Posicao dos lasers
+vec2 LASER_POS;
 
 // Score
 unsigned int SCORE;
