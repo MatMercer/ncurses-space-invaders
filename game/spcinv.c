@@ -74,7 +74,7 @@ void play() {
 
         // Movimenta o jogo
         playerMovement();
-        if(GLOBALTIME % 20 == 0) {
+        if(GLOBALTIME % 10 == 0) {
             aliensMovement();
         }
         playerShoot();
@@ -176,16 +176,11 @@ void drawAliens() {
 void drawLasers() {
     // Se nao estiver em cima do player
     if(LASER_POS.y != PLAYER_POS.y - 1) {
-
         // Limpa posicao anterior do laser
         mvprintw(LASER_POS.y + 1, LASER_POS.x, " ");
         // Desenha o projetil disparado
         mvprintw(LASER_POS.y, LASER_POS.x, "|");
     }
-    else {
-        mvprintw(LASER_POS.y + 1, LASER_POS.x, "@");
-    } 
-    
 }
 
 #ifdef DEBUG
@@ -286,12 +281,9 @@ void aliensMovement() {
 }
 
 void lasersMovement() {
-    // Recebe o x da posicao que player atirou
-    LASER_POS.x = PLAYER_POS.x + 1; 
-
     // Movimenta o laser para cima se esta dentro das bordas
     if(LASER_POS.y > BORDER_AREA.y1) {
-        if(GLOBALTIME % 20) {
+        if(GLOBALTIME % 5 == 0) {
             LASER_POS.y -= 1;
         } 
     }
@@ -299,6 +291,7 @@ void lasersMovement() {
         // Laser volta em cima do player
         LASER_POS.y = PLAYER_POS.y - 1;
         LASER_POS.x = PLAYER_POS.x + 1;
+        IS_SHOOTING = FALSE;
     }  
 }
 
@@ -311,10 +304,16 @@ void playerShoot() {
     // Variaveis de loop
     int i;
 
-    // Atire se o player apertar espaco
-    if(PRESSED_KEY = ' ') {
+    // Atire se o player apertar espaco e nao houver outro disparo em andamento
+    if((PRESSED_KEY == ' ') && (IS_SHOOTING == FALSE)){
+        IS_SHOOTING = TRUE;
+        // Define o x do laser apenas uma vez, corrige o bug de desvio do tiro
+        LASER_POS.x = PLAYER_POS.x + 1; 
+    } 
+
+    if(IS_SHOOTING) {
         lasersMovement();
-    }  
+    }
 }
 
 void gameOver(bool winner) {

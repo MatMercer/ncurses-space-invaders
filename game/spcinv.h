@@ -86,6 +86,7 @@ void playerShoot();
 // Desenha os tiros dos aliens
 void alienShoot();
 
+// Movimenta os lasers
 void lasersMovement();
 
 // Renderiza
@@ -124,6 +125,9 @@ vec2 **ALIENS_POS;
 
 // Posicao dos lasers
 vec2 LASER_POS;
+
+// Diz se existe um disparo em andamento
+bool IS_SHOOTING;
 
 // Score
 unsigned int SCORE;
