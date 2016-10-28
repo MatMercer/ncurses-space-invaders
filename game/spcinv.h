@@ -4,6 +4,7 @@
 #include <ncurses.h>
 #include <stdbool.h>
 #include <signal.h>
+#include <time.h>
 
 /* Constantes */
 
@@ -29,7 +30,7 @@
 #define DOWN 2
 
 // Define a quantidade de lasers no jogo
-//#define MAX_LASERS 2
+#define MAX_LASERS 2
 
 /* Definicoes e construtores */
 
@@ -52,8 +53,12 @@ void initGame();
 
 // Define a posicao inicial do player
 void initPlayer();
+
 // Inicializa a matriz dos aliens
 void initAliens();
+
+// Inicia os lasers nas suas posicoes
+void initLasers();
 
 // Comeca o loop do jogo
 // Chama a funcao getPressedKey()
@@ -84,7 +89,7 @@ void aliensMovement();
 void playerShoot();
 
 // Desenha os tiros dos aliens
-void alienShoot();
+void aliensShoot();
 
 // Movimenta os lasers
 void lasersMovement();
@@ -124,10 +129,10 @@ vec2 PLAYER_POS;
 vec2 **ALIENS_POS;
 
 // Posicao dos lasers
-vec2 LASER_POS;
+vec2 LASER_POS[MAX_LASERS];
 
-// Diz se existe um disparo em andamento
-bool IS_SHOOTING;
+// Diz se existe um disparo do player em andamento
+bool IS_PLAYER_SHOOTING;
 
 // Score
 unsigned int SCORE;
