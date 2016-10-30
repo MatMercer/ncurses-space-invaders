@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <ncurses.h>
-#include "./game/spcinv.h"
+#include "./spcinv/spcinv.h"
 
 int main() {
     initGame();
