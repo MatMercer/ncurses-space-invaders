@@ -12,10 +12,10 @@ include_directories(${CURSES_INCLUDE_DIR})
 set(SOURCES main.c spcinv/spcinv.h spcinv/spcinv.c)
 
 # Release
-add_executable(space_invaders ${SOURCES})
-target_link_libraries(space_invaders ${CURSES_LIBRARIES})
+add_executable(spaceinvaders ${SOURCES})
+target_link_libraries(spaceinvaders ${CURSES_LIBRARIES})
 
 # Debug
 add_definitions(-DDEBUG)
-add_executable(space_debug ${SOURCES})
-target_link_libraries(space_debug ${CURSES_LIBRARIES})
+add_executable(spacedebug ${SOURCES})
+target_link_libraries(spacedebug ${CURSES_LIBRARIES})
