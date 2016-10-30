@@ -28,6 +28,7 @@
 #define LEFT -1
 #define UP -2
 #define DOWN 2
+#define NONE 0
 
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 2
@@ -48,10 +49,11 @@ typedef struct areas {
     int y2;
 } area;
 
-// Struct de componente, posicao, vivo ou morto
+// Struct de componente, posicao, vivo ou morto e direcao
 typedef struct components {
     vec2 pos;
     bool isAlive;
+    int direction;
 } component;
 
 // Inicia o jogo e configura o ncurses
@@ -88,7 +90,7 @@ void gameOver(bool winner);
 void playerMovement();
 
 // Movimenta os aliens
-// Detecta colisoes com a parede e modifica o ALIEN_DIRECTION
+// Detecta colisoes com a parede e modifica o ALIENS_DIRECTION
 void aliensMovement();
 
 // Detecta se o jogador quer atirar e chama lasersMovement()
@@ -117,6 +119,9 @@ void drawPlayer();
 // Desenha os lasers em suas posicoes
 void drawLasers();
 
+// Movementa um componente baseado em sua direcao se ele estiver vivo
+void moveComponent(component *comp);
+
 /* Variaveis globais */
 
 // vec2 zerado, evita lixo de memoria
@@ -144,7 +149,7 @@ bool IS_PLAYER_SHOOTING;
 unsigned int SCORE;
 
 // Direcao dos aliens, muda de acordo com as colisoes
-int ALIEN_DIRECTION;
+int ALIENS_DIRECTION;
 
 // True para normal, false para gameover
 bool GAME_STATUS;

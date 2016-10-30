@@ -60,12 +60,13 @@ void initAliens() {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             ALIENS[i][j].pos.x = 1 + BORDER_AREA.x1 + (3 * i);
             ALIENS[i][j].pos.y = 1 + BORDER_AREA.y1 + (2 * j);
+            // Estap vivos
             ALIENS[i][j].isAlive = TRUE;
         }
     }
 
     // Manda eles andarem para a direita
-    ALIEN_DIRECTION = RIGHT;
+    ALIENS_DIRECTION = RIGHT;
 }
 
 void initLasers() {
@@ -198,6 +199,18 @@ void drawLasers() {
     mvprintw(LASER_POS[1].y, LASER_POS[1].x, "|");
 }
 
+void moveComponent(component *comp) {
+    // Por enquanto nao faz sentido um componente morto se mover :v
+    if (comp->isAlive) {
+        // += eh um macete para direcao no terminal
+        if (comp->direction == RIGHT || comp->direction == LEFT) {
+            comp->pos.x += comp->direction;
+        } else if (comp->direction == UP || comp->direction == DOWN) {
+            comp->pos.y += comp->direction / 2; // como UP eh -2, -2/2 == -1, decrementa o Y etc
+        }
+    }
+}
+
 #ifdef DEBUG
 
 char *dirToString(int dir) {
@@ -210,6 +223,8 @@ char *dirToString(int dir) {
             return "DOWN";
         case -2:
             return "UP";
+        case 0:
+            return "NONE";
         default:
             return "UNDEFINED";
     }
@@ -221,7 +236,7 @@ void drawDebug() {
     mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME,
              PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
     mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ",
-             dirToString(ALIEN_DIRECTION), LASER_POS[0].x, LASER_POS[0].y);
+             dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y);
 }
 
 #endif
@@ -252,11 +267,8 @@ void aliensMovement() {
     // Movimentacao dos aliens
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            if (ALIEN_DIRECTION == LEFT || ALIEN_DIRECTION == RIGHT) {
-                ALIENS[i][j].pos.x += ALIEN_DIRECTION;
-            } else if (ALIEN_DIRECTION == UP || ALIEN_DIRECTION == DOWN) {
-                ALIENS[i][j].pos.y += ALIEN_DIRECTION / 2; // como up e down eh -2 ou 2, aqui pode ser -1 ou 1
-            }
+            ALIENS[i][j].direction = ALIENS_DIRECTION;
+            moveComponent(&ALIENS[i][j]);
         }
     }
 
@@ -270,19 +282,19 @@ void aliensMovement() {
             }
             // Colisao com a borda direita
             if (ALIENS[i][j].pos.x + 4 > BORDER_AREA.x2) {
-                if (ALIEN_DIRECTION != DOWN) {
-                    ALIEN_DIRECTION = DOWN;
+                if (ALIENS_DIRECTION != DOWN) {
+                    ALIENS_DIRECTION = DOWN;
                 } else {
-                    ALIEN_DIRECTION = LEFT;
+                    ALIENS_DIRECTION = LEFT;
                 }
                 break;
             }
                 // Colisao com a borda esquerda
             else if (ALIENS[i][j].pos.x - 2 < BORDER_AREA.x1) {
-                if (ALIEN_DIRECTION != DOWN) {
-                    ALIEN_DIRECTION = DOWN;
+                if (ALIENS_DIRECTION != DOWN) {
+                    ALIENS_DIRECTION = DOWN;
                 } else {
-                    ALIEN_DIRECTION = RIGHT;
+                    ALIENS_DIRECTION = RIGHT;
                 }
                 break;
             }
