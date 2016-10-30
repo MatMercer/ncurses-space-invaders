@@ -39,7 +39,7 @@ void initGame() {
     initLasers();
 }
 
-void initPlayer(){
+void initPlayer() {
     // O player comeca no meio e embaixo
     PLAYER_POS.x = WIN_SIZE.x / 2;
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
@@ -50,14 +50,14 @@ void initAliens() {
     int i, j;
 
     // Aloca os aliens
-    ALIENS_POS = calloc(ALIENS_ROWS, sizeof(vec2*));
-    for(i = 0; i < ALIENS_ROWS; i++) {
+    ALIENS_POS = calloc(ALIENS_ROWS, sizeof(vec2 *));
+    for (i = 0; i < ALIENS_ROWS; i++) {
         ALIENS_POS[i] = calloc(ALIENS_COLUMNS, sizeof(vec2));
     }
 
     // Coloca os aliens na posicao inicial
-    for(i = 0; i < ALIENS_ROWS; i++) {
-        for(j = 0; j < ALIENS_COLUMNS; j++) {
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
             ALIENS_POS[i][j].x = 1 + BORDER_AREA.x1 + (3 * i);
             ALIENS_POS[i][j].y = 1 + BORDER_AREA.y1 + (2 * j);
         }
@@ -78,7 +78,7 @@ void initLasers() {
 
 void play() {
     // Enquanto nao for gameover...
-    while(GAME_STATUS) {
+    while (GAME_STATUS) {
         // Pega qual tecla esta sendo pressionada
         getPressedKey();
 
@@ -86,11 +86,11 @@ void play() {
         playerMovement();
         playerShoot();
 
-        if(GLOBALTIME % 10 == 0) {
+        if (GLOBALTIME % 10 == 0) {
             aliensMovement();
             aliensShoot();
         }
-        
+
         // Renderiza
         render();
 
@@ -137,10 +137,10 @@ void getWinSize() {
     getmaxyx(stdscr, WIN_SIZE.y, WIN_SIZE.x);
 
     // Verifica se a WIN_SIZE nao esta menor que o tamanho minimo
-    if(WIN_SIZE.x < MIN_WINX) {
+    if (WIN_SIZE.x < MIN_WINX) {
         WIN_SIZE.x = MIN_WINX;
     }
-    if(WIN_SIZE.y < MIN_WINY) {
+    if (WIN_SIZE.y < MIN_WINY) {
         WIN_SIZE.y = MIN_WINY;
     }
 }
@@ -149,19 +149,19 @@ void drawBorder() {
     int i;
 
     // Tamanho da area da borda
-    BORDER_AREA.x1 = WIN_SIZE.x/2 - WIN_SIZE.x/3;
-    BORDER_AREA.x2 = WIN_SIZE.x/2 + WIN_SIZE.x/3;
-    BORDER_AREA.y1 = WIN_SIZE.y/2 - WIN_SIZE.y/3;
-    BORDER_AREA.y2 = WIN_SIZE.y/2 + WIN_SIZE.y/3;
+    BORDER_AREA.x1 = WIN_SIZE.x / 2 - WIN_SIZE.x / 3;
+    BORDER_AREA.x2 = WIN_SIZE.x / 2 + WIN_SIZE.x / 3;
+    BORDER_AREA.y1 = WIN_SIZE.y / 2 - WIN_SIZE.y / 3;
+    BORDER_AREA.y2 = WIN_SIZE.y / 2 + WIN_SIZE.y / 3;
 
     // Bordas Verticais
-    for(i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++) {
+    for (i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++) {
         mvprintw(i, BORDER_AREA.x1, BORDA);
         mvprintw(i, BORDER_AREA.x2, BORDA);
     }
 
     // Bordas Horizontais
-    for(i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++) {
+    for (i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++) {
         mvprintw(BORDER_AREA.y1, i, BORDA);
         mvprintw(BORDER_AREA.y2, i, BORDA);
     }
@@ -177,8 +177,8 @@ void drawPlayer() {
 void drawAliens() {
     int i, j;
 
-    for(i = 0; i < ALIENS_ROWS; i++) {
-        for(j = 0; j < ALIENS_COLUMNS; j++) {
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
             mvprintw(ALIENS_POS[i][j].y, ALIENS_POS[i][j].x, "@ @");
             mvprintw(ALIENS_POS[i][j].y + 1, ALIENS_POS[i][j].x, " @");
         }
@@ -187,7 +187,7 @@ void drawAliens() {
 
 void drawLasers() {
     // Se nao estiver em cima do player
-    if(LASER_POS[0].y != PLAYER_POS.y - 1) {
+    if (LASER_POS[0].y != PLAYER_POS.y - 1) {
         // Limpa posicao anterior do laser
         mvprintw(LASER_POS[0].y + 1, LASER_POS[0].x, " ");
         // Desenha o laser disparado pelo player
@@ -198,31 +198,31 @@ void drawLasers() {
 }
 
 #ifdef DEBUG
-char* dirToString(int dir) {
-    switch(dir) {
-    case 1:
-        return "RIGHT";
-        break;
-    case -1:
-        return "LEFT";
-        break;
-    case 2:
-        return "DOWN";
-        break;
-    case -2:
-        return "UP";
-        break;
-    default:
-        return "UNDEFINED";
-        break;
+
+char *dirToString(int dir) {
+    switch (dir) {
+        case 1:
+            return "RIGHT";
+        case -1:
+            return "LEFT";
+        case 2:
+            return "DOWN";
+        case -2:
+            return "UP";
+        default:
+            return "UNDEFINED";
     }
 }
 
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d", WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
-    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME, PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
-    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ", dirToString(ALIEN_DIRECTION), LASER_POS[0].x, LASER_POS[0].y);
+    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d",
+             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
+    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME,
+             PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ",
+             dirToString(ALIEN_DIRECTION), LASER_POS[0].x, LASER_POS[0].y);
 }
+
 #endif
 
 void playerMovement() {
@@ -230,18 +230,16 @@ void playerMovement() {
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
 
     // Verifica se o player nao esta fora da borda
-    if(PLAYER_POS.x + 4 > BORDER_AREA.x2) {
+    if (PLAYER_POS.x + 4 > BORDER_AREA.x2) {
         PLAYER_POS.x = BORDER_AREA.x2 - 3;
-    }
-    else if(PLAYER_POS.x < BORDER_AREA.x1) {
+    } else if (PLAYER_POS.x < BORDER_AREA.x1) {
         PLAYER_POS.x = BORDER_AREA.x2 + 1;
     }
 
     // Movimenta o player para a direita ou esquerda
-    if((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 3 < BORDER_AREA.x2)) {
+    if ((PRESSED_KEY == KEY_RIGHT) && (PLAYER_POS.x + 3 < BORDER_AREA.x2)) {
         PLAYER_POS.x += RIGHT;
-    }
-    else if((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 1 > BORDER_AREA.x1)) {
+    } else if ((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 1 > BORDER_AREA.x1)) {
         PLAYER_POS.x += LEFT;
     }
 }
@@ -251,41 +249,38 @@ void aliensMovement() {
     int i, j;
 
     // Movimentacao dos aliens
-    for(i = 0; i < ALIENS_ROWS; i++) {
-        for(j = 0; j < ALIENS_COLUMNS; j++) {
-            if(ALIEN_DIRECTION == LEFT || ALIEN_DIRECTION == RIGHT) {
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
+            if (ALIEN_DIRECTION == LEFT || ALIEN_DIRECTION == RIGHT) {
                 ALIENS_POS[i][j].x += ALIEN_DIRECTION;
-            }
-            else if(ALIEN_DIRECTION == UP || ALIEN_DIRECTION == DOWN) {
+            } else if (ALIEN_DIRECTION == UP || ALIEN_DIRECTION == DOWN) {
                 ALIENS_POS[i][j].y += ALIEN_DIRECTION / 2; // como up e down eh -2 ou 2, aqui pode ser -1 ou 1
             }
         }
     }
 
     // Calcula a direcao que os aliens devem ir no proximo passo
-    for(i = 0; i < ALIENS_ROWS; i++) {
-        for(j = 0; j < ALIENS_COLUMNS; j++) {
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
             //Verifica se os aliens estao no mesmo y do player
-            if(ALIENS_POS[i][j].y + 1 == PLAYER_POS.y){
+            if (ALIENS_POS[i][j].y + 1 == PLAYER_POS.y) {
                 gameOver(FALSE); // Fim de jogo - Derrota
                 break;
             }
             // Colisao com a borda direita
-            if(ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
-                if(ALIEN_DIRECTION != DOWN) {
+            if (ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
+                if (ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
-                }
-                else {
+                } else {
                     ALIEN_DIRECTION = LEFT;
                 }
                 break;
             }
-            // Colisao com a borda esquerda
-            else if(ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
-                if(ALIEN_DIRECTION != DOWN) {
+                // Colisao com a borda esquerda
+            else if (ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
+                if (ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
-                }
-                else {
+                } else {
                     ALIEN_DIRECTION = RIGHT;
                 }
                 break;
@@ -296,17 +291,16 @@ void aliensMovement() {
 
 void lasersMovement() {
     // Movimenta o laser para cima se esta dentro das bordas
-    if(LASER_POS[0].y > BORDER_AREA.y1) {
-        if(GLOBALTIME % 5 == 0) {
+    if (LASER_POS[0].y > BORDER_AREA.y1) {
+        if (GLOBALTIME % 5 == 0) {
             LASER_POS[0].y -= 1;
-        } 
-    }
-    else {
+        }
+    } else {
         // Laser volta em cima do player
         LASER_POS[0].y = PLAYER_POS.y - 1;
         LASER_POS[0].x = PLAYER_POS.x + 1;
         IS_PLAYER_SHOOTING = FALSE;
-    }  
+    }
 }
 
 void aliensShoot() {
@@ -318,37 +312,33 @@ void aliensShoot() {
     alien_shooting = rand() % 5;
 
     // Movimenta o laser para baixo se esta dentro das bordas
-    if(LASER_POS[1].y <= PLAYER_POS.y) {
+    if (LASER_POS[1].y <= PLAYER_POS.y) {
         LASER_POS[1].y += 1;
 
         // Caso o laser acerte o player -> Fim de jogo - Derrota
-        if((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
-           (LASER_POS[1].y == PLAYER_POS.y) && (LASER_POS[1].x == PLAYER_POS.x + 1) ||
-           (LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x + 2)){
+        if ((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
+            (LASER_POS[1].y == PLAYER_POS.y) && (LASER_POS[1].x == PLAYER_POS.x + 1) ||
+            (LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x + 2)) {
             gameOver(FALSE);
-        }    
-    }
-    else {
+        }
+    } else {
         // Laser volta embaixo dos aliens
         LASER_POS[1].y = ALIENS_POS[alien_shooting][j].y + 2;
         LASER_POS[1].x = ALIENS_POS[alien_shooting][j].x;
-    }    
+    }
 
     // TODO: verificar aliens atingidos
 }
 
 void playerShoot() {
-    // Variaveis de loop
-    int i;
-
     // Atire se o player apertar espaco e nao houver outro disparo em andamento
-    if((PRESSED_KEY == ' ') && (IS_PLAYER_SHOOTING == FALSE)){
+    if ((PRESSED_KEY == ' ') && (IS_PLAYER_SHOOTING == FALSE)) {
         IS_PLAYER_SHOOTING = TRUE;
         // Define o x do laser apenas uma vez, corrige o bug de desvio do tiro
-        LASER_POS[0].x = PLAYER_POS.x + 1; 
-    } 
+        LASER_POS[0].x = PLAYER_POS.x + 1;
+    }
 
-    if(IS_PLAYER_SHOOTING) {
+    if (IS_PLAYER_SHOOTING) {
         lasersMovement();
     }
 }
@@ -367,7 +357,7 @@ void gameOver(bool winner) {
     int yMsgDir = DOWN;
 
     // Enquanto a tecla q nao for apertada...
-    while(PRESSED_KEY != 'q') {
+    while (PRESSED_KEY != 'q') {
         // Pega qual tecla esta sendo pressionada no momento
         getPressedKey();
 
@@ -375,39 +365,38 @@ void gameOver(bool winner) {
         clear();
 
         // Debug
-        #ifdef DEBUG
+#ifdef DEBUG
         drawDebug();
-        #endif
+#endif
 
         // Desenha a borda
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x,  "   You %s with %d Points! Press q to exit!", winner ? "won":"lost", SCORE);
-        mvprintw(gmOverMsgPos.y, gmOverMsgPos.x,      "   ___   _   __  __ ___    _____   _____ ___");
-        mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x,  "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
-        mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x,  " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
-        mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x,  "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "   You %s with %d Points! Press q to exit!",
+                 winner ? "won" : "lost", SCORE);
+        mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "   ___   _   __  __ ___    _____   _____ ___");
+        mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
+        mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x, " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
+        mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x, "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
 
         // Movimenta a mensagem de gameover, verificando colisoes
-        if(GLOBALTIME % 25 == 0) {
+        if (GLOBALTIME % 25 == 0) {
             // Movimenta a msg com a direcao
             gmOverMsgPos.x += xMsgDir;
-            gmOverMsgPos.y += yMsgDir/2;
+            gmOverMsgPos.y += yMsgDir / 2;
 
             // Colisao no eixo x
-            if(gmOverMsgPos.x + 45 >= BORDER_AREA.x2) {
+            if (gmOverMsgPos.x + 45 >= BORDER_AREA.x2) {
                 xMsgDir = LEFT;
-            }
-            else if(gmOverMsgPos.x - 1 <= BORDER_AREA.x1) {
+            } else if (gmOverMsgPos.x - 1 <= BORDER_AREA.x1) {
                 xMsgDir = RIGHT;
             }
 
             // Colisao no eixo y
-            if(gmOverMsgPos.y + 4 >= BORDER_AREA.y2) {
+            if (gmOverMsgPos.y + 4 >= BORDER_AREA.y2) {
                 yMsgDir = UP;
-            }
-            else if(gmOverMsgPos.y - 2 <= BORDER_AREA.y1) {
+            } else if (gmOverMsgPos.y - 2 <= BORDER_AREA.y1) {
                 yMsgDir = DOWN;
             }
         }

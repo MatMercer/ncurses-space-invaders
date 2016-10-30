@@ -13,7 +13,7 @@
 
 // Como tudo deve ser printado
 #define BORDA "*"
-#define NAVES "@" //not used
+//#define NAVES "@" // not used
 
 // Tamanho minimo da window
 #define MIN_WINX 80
@@ -114,7 +114,7 @@ void drawLasers();
 /* Variaveis globais */
 
 // vec2 zerado, evita lixo de memoria
-const vec2 INIT_VEC2;
+// const vec2 INIT_VEC2; // not used
 
 // Tamanho da tela
 vec2 WIN_SIZE;
@@ -151,5 +151,7 @@ unsigned long int GLOBALTIME;
 
 // Usado para debug
 #ifdef DEBUG
+
 void drawDebug();
+
 #endif
