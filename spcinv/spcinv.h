@@ -48,6 +48,12 @@ typedef struct areas {
     int y2;
 } area;
 
+// Struct de componente, posicao, vivo ou morto
+typedef struct components {
+    vec2 pos;
+    bool isAlive;
+} component;
+
 // Inicia o jogo e configura o ncurses
 void initGame();
 
@@ -126,7 +132,7 @@ area BORDER_AREA;
 vec2 PLAYER_POS;
 
 // Posicao dos aliens
-vec2 **ALIENS_POS;
+component **ALIENS;
 
 // Posicao dos lasers
 vec2 LASER_POS[MAX_LASERS];

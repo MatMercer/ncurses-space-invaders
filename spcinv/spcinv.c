@@ -50,16 +50,17 @@ void initAliens() {
     int i, j;
 
     // Aloca os aliens
-    ALIENS_POS = calloc(ALIENS_ROWS, sizeof(vec2 *));
+    ALIENS = calloc(ALIENS_ROWS, sizeof(component *));
     for (i = 0; i < ALIENS_ROWS; i++) {
-        ALIENS_POS[i] = calloc(ALIENS_COLUMNS, sizeof(vec2));
+        ALIENS[i] = calloc(ALIENS_COLUMNS, sizeof(component));
     }
 
     // Coloca os aliens na posicao inicial
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            ALIENS_POS[i][j].x = 1 + BORDER_AREA.x1 + (3 * i);
-            ALIENS_POS[i][j].y = 1 + BORDER_AREA.y1 + (2 * j);
+            ALIENS[i][j].pos.x = 1 + BORDER_AREA.x1 + (3 * i);
+            ALIENS[i][j].pos.y = 1 + BORDER_AREA.y1 + (2 * j);
+            ALIENS[i][j].isAlive = TRUE;
         }
     }
 
@@ -72,8 +73,8 @@ void initLasers() {
     LASER_POS[0].y = PLAYER_POS.y - 1;
 
     // Laser[1] comeca embaixo dos aliens
-    LASER_POS[1].y = ALIENS_POS[4][4].y + 2;
-    LASER_POS[1].x = ALIENS_POS[4][4].x;
+    LASER_POS[1].y = ALIENS[4][4].pos.y + 2;
+    LASER_POS[1].x = ALIENS[4][4].pos.x;
 }
 
 void play() {
@@ -179,8 +180,8 @@ void drawAliens() {
 
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            mvprintw(ALIENS_POS[i][j].y, ALIENS_POS[i][j].x, "@ @");
-            mvprintw(ALIENS_POS[i][j].y + 1, ALIENS_POS[i][j].x, " @");
+            mvprintw(ALIENS[i][j].pos.y, ALIENS[i][j].pos.x, "@ @");
+            mvprintw(ALIENS[i][j].pos.y + 1, ALIENS[i][j].pos.x, " @");
         }
     }
 }
@@ -252,9 +253,9 @@ void aliensMovement() {
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             if (ALIEN_DIRECTION == LEFT || ALIEN_DIRECTION == RIGHT) {
-                ALIENS_POS[i][j].x += ALIEN_DIRECTION;
+                ALIENS[i][j].pos.x += ALIEN_DIRECTION;
             } else if (ALIEN_DIRECTION == UP || ALIEN_DIRECTION == DOWN) {
-                ALIENS_POS[i][j].y += ALIEN_DIRECTION / 2; // como up e down eh -2 ou 2, aqui pode ser -1 ou 1
+                ALIENS[i][j].pos.y += ALIEN_DIRECTION / 2; // como up e down eh -2 ou 2, aqui pode ser -1 ou 1
             }
         }
     }
@@ -263,12 +264,12 @@ void aliensMovement() {
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             //Verifica se os aliens estao no mesmo y do player
-            if (ALIENS_POS[i][j].y + 1 == PLAYER_POS.y) {
+            if (ALIENS[i][j].pos.y + 1 == PLAYER_POS.y) {
                 gameOver(FALSE); // Fim de jogo - Derrota
                 break;
             }
             // Colisao com a borda direita
-            if (ALIENS_POS[i][j].x + 4 > BORDER_AREA.x2) {
+            if (ALIENS[i][j].pos.x + 4 > BORDER_AREA.x2) {
                 if (ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
                 } else {
@@ -277,7 +278,7 @@ void aliensMovement() {
                 break;
             }
                 // Colisao com a borda esquerda
-            else if (ALIENS_POS[i][j].x - 2 < BORDER_AREA.x1) {
+            else if (ALIENS[i][j].pos.x - 2 < BORDER_AREA.x1) {
                 if (ALIEN_DIRECTION != DOWN) {
                     ALIEN_DIRECTION = DOWN;
                 } else {
@@ -323,8 +324,8 @@ void aliensShoot() {
         }
     } else {
         // Laser volta embaixo dos aliens
-        LASER_POS[1].y = ALIENS_POS[alien_shooting][j].y + 2;
-        LASER_POS[1].x = ALIENS_POS[alien_shooting][j].x;
+        LASER_POS[1].y = ALIENS[alien_shooting][j].pos.y + 2;
+        LASER_POS[1].x = ALIENS[alien_shooting][j].pos.x;
     }
 
     // TODO: verificar aliens atingidos
