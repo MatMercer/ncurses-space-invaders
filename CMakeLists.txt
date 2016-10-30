@@ -15,6 +15,7 @@ set(SOURCES main.c spcinv/spcinv.h spcinv/spcinv.c)
 add_executable(spaceinvaders ${SOURCES})
 target_link_libraries(spaceinvaders ${CURSES_LIBRARIES})
 
+#TODO: The two executable are compiled with DEBUG defined, it's an error
 # Debug
 add_definitions(-DDEBUG)
 add_executable(spacedebug ${SOURCES})
