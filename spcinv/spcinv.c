@@ -231,8 +231,8 @@ char *dirToString(int dir) {
 }
 
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d",
-             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS);
+    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d\tDETECTED CHAR: %c",
+             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS, DETECTED_CHAR & A_CHARTEXT); //TODO: Teste de detecão de colisao, remover isso no futuro
     mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME,
              PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
     mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ",
@@ -258,6 +258,10 @@ void playerMovement() {
     } else if ((PRESSED_KEY == KEY_LEFT) && (PLAYER_POS.x - 1 > BORDER_AREA.x1)) {
         PLAYER_POS.x += LEFT;
     }
+
+    //TODO: Teste de detecão de colisao, remover isso no futuro
+    DETECTED_CHAR = mvinch(PLAYER_POS.y, PLAYER_POS.x + 3);
+
 }
 
 void aliensMovement() {
@@ -275,28 +279,30 @@ void aliensMovement() {
     // Calcula a direcao que os aliens devem ir no proximo passo
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            //Verifica se os aliens estao no mesmo y do player
-            if (ALIENS[i][j].pos.y + 1 == PLAYER_POS.y) {
-                gameOver(FALSE); // Fim de jogo - Derrota
-                break;
-            }
-            // Colisao com a borda direita
-            if (ALIENS[i][j].pos.x + 4 > BORDER_AREA.x2) {
-                if (ALIENS_DIRECTION != DOWN) {
-                    ALIENS_DIRECTION = DOWN;
-                } else {
-                    ALIENS_DIRECTION = LEFT;
+            if (ALIENS[i][j].isAlive) {
+                //Verifica se os aliens estao no mesmo y do player
+                if (ALIENS[i][j].pos.y + 1 == PLAYER_POS.y) {
+                    gameOver(FALSE); // Fim de jogo - Derrota
+                    break;
                 }
-                break;
-            }
-                // Colisao com a borda esquerda
-            else if (ALIENS[i][j].pos.x - 2 < BORDER_AREA.x1) {
-                if (ALIENS_DIRECTION != DOWN) {
-                    ALIENS_DIRECTION = DOWN;
-                } else {
-                    ALIENS_DIRECTION = RIGHT;
+                // Colisao com a borda direita
+                if (ALIENS[i][j].pos.x + 4 > BORDER_AREA.x2) {
+                    if (ALIENS_DIRECTION != DOWN) {
+                        ALIENS_DIRECTION = DOWN;
+                    } else {
+                        ALIENS_DIRECTION = LEFT;
+                    }
+                    break;
                 }
-                break;
+                    // Colisao com a borda esquerda
+                else if (ALIENS[i][j].pos.x - 2 < BORDER_AREA.x1) {
+                    if (ALIENS_DIRECTION != DOWN) {
+                        ALIENS_DIRECTION = DOWN;
+                    } else {
+                        ALIENS_DIRECTION = RIGHT;
+                    }
+                    break;
+                }
             }
         }
     }

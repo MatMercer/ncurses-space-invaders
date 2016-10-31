@@ -160,6 +160,9 @@ int PRESSED_KEY;
 // Um timer global, eh incrementado a cada loop da funcao play()
 unsigned long int GLOBALTIME;
 
+//TODO: Teste de detecão de colisao, remover isso no futuro
+chtype DETECTED_CHAR;
+
 // Usado para debug
 #ifdef DEBUG
 
