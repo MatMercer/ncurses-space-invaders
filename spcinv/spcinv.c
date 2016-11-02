@@ -60,7 +60,7 @@ void initAliens() {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             ALIENS[i][j].pos.x = 1 + BORDER_AREA.x1 + (3 * i);
             ALIENS[i][j].pos.y = 1 + BORDER_AREA.y1 + (2 * j);
-            // Estap vivos
+            // Estao vivos
             ALIENS[i][j].isAlive = TRUE;
         }
     }
@@ -231,12 +231,12 @@ char *dirToString(int dir) {
 }
 
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \tBORDER AREA: %d:%d:%d:%d \tGAME STATUS: %d\tDETECTED CHAR: %c",
-             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GAME_STATUS, DETECTED_CHAR & A_CHARTEXT); //TODO: Teste de detecão de colisao, remover isso no futuro
-    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "GLOBALTIME: %ld \t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d", GLOBALTIME,
-             PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
-    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d ",
-             dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y);
+    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \t BORDER AREA: %d:%d:%d:%d \t\tGLOBALTIME: %ld ",
+             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GLOBALTIME); //TODO: Teste de detecão de colisao, remover isso no futuro
+    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "DETECTED CHAR: %c\t\tPLAYER POS: %d:%d\t\tPRESSED KEY: %d",
+             DETECTED_CHAR & A_CHARTEXT, PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d \t\tGAME STATUS: %d",
+             dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y, GAME_STATUS);
 }
 
 #endif
@@ -261,7 +261,6 @@ void playerMovement() {
 
     //TODO: Teste de detecão de colisao, remover isso no futuro
     DETECTED_CHAR = mvinch(PLAYER_POS.y, PLAYER_POS.x + 3);
-
 }
 
 void aliensMovement() {
@@ -335,11 +334,18 @@ void aliensShoot() {
         LASER_POS[1].y += 1;
 
         // Caso o laser acerte o player -> Fim de jogo - Derrota
-        if ((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
+        /*if ((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
             (LASER_POS[1].y == PLAYER_POS.y) && (LASER_POS[1].x == PLAYER_POS.x + 1) ||
             (LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x + 2)) {
             gameOver(FALSE);
+        }*/
+
+        if((mvinch(PLAYER_POS.y, PLAYER_POS.x) == '|') ||
+           (mvinch(PLAYER_POS.y - 1, PLAYER_POS.x + 1) == '|') ||
+           (mvinch(PLAYER_POS.y, PLAYER_POS.x + 2) == '|')){
+            gameOver(FALSE);
         }
+
     } else {
         // Laser volta embaixo dos aliens
         LASER_POS[1].y = ALIENS[alien_shooting][j].pos.y + 2;
@@ -394,10 +400,10 @@ void gameOver(bool winner) {
         // Desenha a mensagem de gameover
         mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "   You %s with %d Points! Press q to exit!",
                  winner ? "won" : "lost", SCORE);
-        mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "   ___   _   __  __ ___    _____   _____ ___");
-        mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, "  / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
-        mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x, " | (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
-        mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x, "  \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+        mvprintw(gmOverMsgPos.y, gmOverMsgPos.x,     "  ___   _   __  __ ___    _____   _____ ___");
+        mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, " / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
+        mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x, "| (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
+        mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x, " \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
 
         // Movimenta a mensagem de gameover, verificando colisoes
         if (GLOBALTIME % 25 == 0) {

@@ -119,7 +119,7 @@ void drawPlayer();
 // Desenha os lasers em suas posicoes
 void drawLasers();
 
-// Movementa um componente baseado em sua direcao se ele estiver vivo
+// Movimenta um componente baseado em sua direcao se ele estiver vivo
 void moveComponent(component *comp);
 
 /* Variaveis globais */
