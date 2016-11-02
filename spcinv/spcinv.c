@@ -181,8 +181,10 @@ void drawAliens() {
 
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            mvprintw(ALIENS[i][j].pos.y, ALIENS[i][j].pos.x, "@ @");
-            mvprintw(ALIENS[i][j].pos.y + 1, ALIENS[i][j].pos.x, " @");
+            if(ALIENS[i][j].isAlive) {
+                mvprintw(ALIENS[i][j].pos.y, ALIENS[i][j].pos.x, "@ @");
+                mvprintw(ALIENS[i][j].pos.y + 1, ALIENS[i][j].pos.x, " @");
+            }
         }
     }
 }
@@ -272,11 +274,27 @@ void aliensMovement() {
     // Variaveis de loop
     int i, j;
 
+    // Verifica colisoes com laser do player
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
+            // Esquerda - Meio - Direita
+            if( ((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
+                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
+                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
+                ALIENS[i][j].isAlive = FALSE;
+            }
+            // TODO: stop laser after killing one alien
+            // TODO: change aliens lasers
+        }
+    }
+
     // Movimentacao dos aliens
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            ALIENS[i][j].direction = ALIENS_DIRECTION;
-            moveComponent(&ALIENS[i][j]);
+            if(ALIENS[i][j].isAlive) {
+                ALIENS[i][j].direction = ALIENS_DIRECTION;
+                moveComponent(&ALIENS[i][j]);
+            }
         }
     }
 
