@@ -28,10 +28,12 @@
 #define LEFT -1
 #define UP -2
 #define DOWN 2
-#define NONE 0
 
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 2
+
+// Macro para encontrar qual char esta em determinada posicao da tela "Screen Char"
+#define SCRCHAR(y, x) ((mvinch(y, x) & A_CHARTEXT))
 
 /* Definicoes e construtores */
 
@@ -159,9 +161,6 @@ int PRESSED_KEY;
 
 // Um timer global, eh incrementado a cada loop da funcao play()
 unsigned long int GLOBALTIME;
-
-//TODO: Teste de detecão de colisao, remover isso no futuro
-chtype DETECTED_CHAR;
 
 // Usado para debug
 #ifdef DEBUG
