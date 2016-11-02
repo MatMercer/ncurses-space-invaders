@@ -190,8 +190,6 @@ void drawAliens() {
 void drawLasers() {
     // Se nao estiver em cima do player
     if (LASER_POS[0].y != PLAYER_POS.y - 1) {
-        // Limpa posicao anterior do laser
-        mvprintw(LASER_POS[0].y + 1, LASER_POS[0].x, " ");
         // Desenha o laser disparado pelo player
         mvprintw(LASER_POS[0].y, LASER_POS[0].x, "|");
     }
@@ -337,8 +335,7 @@ void aliensShoot() {
     alien_shooting = rand() % 5;
 
     // Movimenta o laser para baixo se esta dentro das bordas
-    if (LASER_POS[1].y <= PLAYER_POS.y) {
-        LASER_POS[1].y += 1;
+    if (LASER_POS[1].y < BORDER_AREA.y2 - 1) {
 
         // Caso o laser acerte o player -> Fim de jogo - Derrota
         /*if ((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
@@ -347,11 +344,7 @@ void aliensShoot() {
             gameOver(FALSE);
         }*/
 
-//        if((mvinch(PLAYER_POS.y, PLAYER_POS.x) == '|') ||
-//           (mvinch(PLAYER_POS.y - 1, PLAYER_POS.x + 1) == '|') ||
-//           (mvinch(PLAYER_POS.y, PLAYER_POS.x + 2) == '|')){
-//            gameOver(FALSE);
-//        }
+        LASER_POS[1].y += 1;
 
     } else {
         // Laser volta embaixo dos aliens
