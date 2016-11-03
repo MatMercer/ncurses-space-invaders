@@ -267,7 +267,6 @@ void playerMovement() {
             ) {
         gameOver(FALSE);
     }
-
 }
 
 void aliensMovement() {
@@ -278,18 +277,26 @@ void aliensMovement() {
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             // Esquerda - Meio - Direita
-            if( ((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
+            if ( ((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
-                ALIENS[i][j].isAlive = FALSE;
 
-                // Laser volta em cima do player apos acertar um alien
-                LASER_POS[0].y = PLAYER_POS.y - 1;
-                LASER_POS[0].x = PLAYER_POS.x + 1;
-                IS_PLAYER_SHOOTING = FALSE;
+                if (ALIENS[i][j].isAlive) {
+                    ALIENS[i][j].isAlive = FALSE;
 
-                // Incrementa o score em + 10 pontos
-                SCORE += 10;
+                    // Laser volta em cima do player apos acertar um alien
+                    LASER_POS[0].y = PLAYER_POS.y - 1;
+                    LASER_POS[0].x = PLAYER_POS.x + 1;
+                    IS_PLAYER_SHOOTING = FALSE;
+
+                    // Incrementa o score em + 10 pontos
+                    SCORE += 10;
+                }
+
+                // Se todos os 25 aliens foram atingidos -> Vitoria
+                if (SCORE == 250) {
+                    gameOver(TRUE);
+                }
             }
 
             // TODO: change aliens lasers
@@ -299,7 +306,7 @@ void aliensMovement() {
     // Movimentacao dos aliens
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
-            if(ALIENS[i][j].isAlive) {
+            if (ALIENS[i][j].isAlive) {
                 ALIENS[i][j].direction = ALIENS_DIRECTION;
                 moveComponent(&ALIENS[i][j]);
             }
