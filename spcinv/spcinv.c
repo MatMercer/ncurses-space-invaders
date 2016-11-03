@@ -282,8 +282,16 @@ void aliensMovement() {
                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
                 ALIENS[i][j].isAlive = FALSE;
+
+                // Laser volta em cima do player apos acertar um alien
+                LASER_POS[0].y = PLAYER_POS.y - 1;
+                LASER_POS[0].x = PLAYER_POS.x + 1;
+                IS_PLAYER_SHOOTING = FALSE;
+
+                // Incrementa o score em + 10 pontos
+                SCORE += 10;
             }
-            // TODO: stop laser after killing one alien
+
             // TODO: change aliens lasers
         }
     }
