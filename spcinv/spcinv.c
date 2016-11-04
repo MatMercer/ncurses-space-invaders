@@ -70,8 +70,8 @@ void initAliens() {
 }
 
 void initLasers() {
-    // Laser[0] comeca em cima do player
-    LASER_POS[0].y = PLAYER_POS.y - 1;
+    // Laser[0] comeca 'em cima' do player
+    LASER_POS[0].y = PLAYER_POS.y;
 
     // Laser[1] comeca embaixo dos aliens
     LASER_POS[1].y = ALIENS[4][4].pos.y + 2;
@@ -190,8 +190,8 @@ void drawAliens() {
 }
 
 void drawLasers() {
-    // Se nao estiver em cima do player
-    if (LASER_POS[0].y != PLAYER_POS.y - 1) {
+    // Se nao estiver 'em cima' do player
+    if (LASER_POS[0].y != PLAYER_POS.y) {
         // Desenha o laser disparado pelo player
         mvprintw(LASER_POS[0].y, LASER_POS[0].x, "|");
     }
@@ -284,17 +284,17 @@ void aliensMovement() {
                 if (ALIENS[i][j].isAlive) {
                     ALIENS[i][j].isAlive = FALSE;
 
-                    // Laser volta em cima do player apos acertar um alien
-                    LASER_POS[0].y = PLAYER_POS.y - 1;
+                    // Laser volta 'em cima' do player apos acertar um alien
+                    LASER_POS[0].y = PLAYER_POS.y;
                     LASER_POS[0].x = PLAYER_POS.x + 1;
                     IS_PLAYER_SHOOTING = FALSE;
 
                     // Incrementa o score em + 10 pontos
-                    SCORE += 10;
+                    SCORE += KILL_SCORE;
                 }
 
                 // Se todos os 25 aliens foram atingidos -> Vitoria
-                if (SCORE == 250) {
+                if (SCORE == (ALIENS_COLUMNS * ALIENS_ROWS * KILL_SCORE)) {
                     gameOver(TRUE);
                 }
             }
@@ -352,8 +352,8 @@ void lasersMovement() {
             LASER_POS[0].y -= 1;
         }
     } else {
-        // Laser volta em cima do player
-        LASER_POS[0].y = PLAYER_POS.y - 1;
+        // Laser volta 'em cima' do player
+        LASER_POS[0].y = PLAYER_POS.y;
         LASER_POS[0].x = PLAYER_POS.x + 1;
         IS_PLAYER_SHOOTING = FALSE;
     }

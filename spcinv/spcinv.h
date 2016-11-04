@@ -11,9 +11,11 @@
 // Delay de cada frame
 #define DELAY 10000
 
-// Como tudo deve ser printado
+// Pontuacao por alien atingido
+#define KILL_SCORE 10
+
+// Como a borda deve ser printada
 #define BORDA "*"
-//#define NAVES "@" // not used
 
 // Tamanho minimo da window
 #define MIN_WINX 80
