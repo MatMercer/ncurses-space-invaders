@@ -74,8 +74,8 @@ void initLasers() {
     LASER_POS[0].y = PLAYER_POS.y;
 
     // Laser[1] comeca embaixo dos aliens
-    LASER_POS[1].y = ALIENS[4][4].pos.y + 2;
-    LASER_POS[1].x = ALIENS[4][4].pos.x;
+    LASER_POS[1].y = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.y + 2;
+    LASER_POS[1].x = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.x;
 }
 
 void play() {
@@ -231,10 +231,11 @@ char *dirToString(int dir) {
 }
 
 void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d \t BORDER AREA: %d:%d:%d:%d \t\tGLOBALTIME: %ld ",
-             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GLOBALTIME); //TODO: Teste de detecão de colisao, remover isso no futuro
-    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "PLAYER POS: %d:%d\t\tPRESSED KEY: %d", PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY);
-    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\tLASER POS: %d:%d \t\tGAME STATUS: %d",
+    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d\t BORDER AREA: %d:%d:%d:%d \tGLOBALTIME: %ld ",
+             WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GLOBALTIME);
+    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "PLAYER POS: %d:%d\t PRESSED KEY: %d \t\tLAST ROW: %u",
+             PLAYER_POS.x, PLAYER_POS.y, PRESSED_KEY, LAST_ALIVE_ROW);
+    mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\t LASER POS: %d:%d \t\tGAME STATUS: %d",
              dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y, GAME_STATUS);
 }
 
@@ -360,32 +361,40 @@ void lasersMovement() {
 }
 
 void aliensShoot() {
-    int j = 4; // Ultima fileira de aliens
-    int alien_shooting;
+    unsigned int i, j, aux;
+    int rand_alien;
+
+    /* Gera varios rands em um curto intervalo de tempo
+    struct timeval t1;
+    gettimeofday(&t1, NULL);
+    srand(t1.tv_usec * t1.tv_sec);*/
 
     // Define qual alien vai disparar, randomicamente
     srand((unsigned) time(NULL));
-    alien_shooting = rand() % 5;
+
+    rand_alien = rand() % ALIENS_COLUMNS;
+
+    // Verifica qual a fileira com aliens vivos mais proxima do player
+    aux = 0;
+    for (i = 0; i < ALIENS_COLUMNS; i++) {
+        for (j = 0; j < ALIENS_ROWS; j++) {
+            if (ALIENS[i][j].isAlive && j >= aux) {
+                aux = j;
+                LAST_ALIVE_ROW = aux;
+            }
+        }
+    }
 
     // Movimenta o laser para baixo se esta dentro das bordas
     if (LASER_POS[1].y < BORDER_AREA.y2 - 1) {
-
-        // Caso o laser acerte o player -> Fim de jogo - Derrota
-        /*if ((LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x) ||
-            (LASER_POS[1].y == PLAYER_POS.y) && (LASER_POS[1].x == PLAYER_POS.x + 1) ||
-            (LASER_POS[1].y == PLAYER_POS.y + 1) && (LASER_POS[1].x == PLAYER_POS.x + 2)) {
-            gameOver(FALSE);
-        }*/
-
         LASER_POS[1].y += 1;
-
     } else {
         // Laser volta embaixo dos aliens
-        LASER_POS[1].y = ALIENS[alien_shooting][j].pos.y + 2;
-        LASER_POS[1].x = ALIENS[alien_shooting][j].pos.x;
+        LASER_POS[1].y = ALIENS[rand_alien][LAST_ALIVE_ROW].pos.y + 2;
+        LASER_POS[1].x = ALIENS[rand_alien][LAST_ALIVE_ROW].pos.x;
     }
 
-    // TODO: verificar aliens atingidos
+    // TODO: aliens mortos nao podem atirar
 }
 
 void playerShoot() {

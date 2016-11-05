@@ -155,6 +155,9 @@ unsigned int SCORE;
 // Direcao dos aliens, muda de acordo com as colisoes
 int ALIENS_DIRECTION;
 
+// Armazena a fileira de aliens mais proxima do player
+unsigned int LAST_ALIVE_ROW;
+
 // True para normal, false para gameover
 bool GAME_STATUS;
 
