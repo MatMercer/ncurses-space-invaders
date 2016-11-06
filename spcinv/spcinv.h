@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include <stdbool.h>
 #include <signal.h>
-#include <time.h>
+#include <sys/time.h>
 
 /* Constantes */
 
@@ -32,7 +32,7 @@
 #define DOWN 2
 
 // Define a quantidade de lasers no jogo
-#define MAX_LASERS 2
+#define MAX_LASERS 8
 
 // Macro para encontrar qual char esta em determinada posicao da tela "Screen Char"
 #define SCRCHAR(y, x) ((mvinch(y, x) & A_CHARTEXT))
@@ -157,6 +157,9 @@ int ALIENS_DIRECTION;
 
 // Armazena a fileira de aliens mais proxima do player
 unsigned int LAST_ALIVE_ROW;
+
+// Ultimo alien vivo da ultima fileira
+unsigned int LAST_ALIVE_ALIEN;
 
 // True para normal, false para gameover
 bool GAME_STATUS;
