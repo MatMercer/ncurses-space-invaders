@@ -32,7 +32,7 @@
 #define DOWN 2
 
 // Define a quantidade de lasers no jogo
-#define MAX_LASERS 8
+#define MAX_LASERS 4
 
 // Macro para encontrar qual char esta em determinada posicao da tela "Screen Char"
 #define SCRCHAR(y, x) ((mvinch(y, x) & A_CHARTEXT))
@@ -155,7 +155,7 @@ unsigned int SCORE;
 // Direcao dos aliens, muda de acordo com as colisoes
 int ALIENS_DIRECTION;
 
-// Armazena a fileira de aliens mais proxima do player
+// Armazena o indice da fileira de aliens mais proxima do player
 unsigned int LAST_ALIVE_ROW;
 
 // Ultimo alien vivo da ultima fileira

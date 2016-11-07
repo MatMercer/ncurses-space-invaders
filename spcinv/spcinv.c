@@ -378,7 +378,8 @@ void lasersMovement() {
 
 void aliensShoot() {
     int i, j, laser_index; // Variaveis de loop
-    int rand_alien;
+    int rand_col;
+    int aliens_index[ALIENS_ROWS];
 
     // Gera varios rands em um curto intervalo de tempo
     struct timeval t1;
@@ -402,24 +403,36 @@ void aliensShoot() {
         }
     }
 
+    // Define o ultimo alien vivo de cada coluna
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        aliens_index[i] = -1;
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
+            if (ALIENS[i][j].isAlive) {
+                aliens_index[i] = j;
+            }
+        }
+    }
+
     // Define qual alien vai disparar, randomicamente
-    rand_alien = rand() % ALIENS_COLUMNS;
+    rand_col = rand() % ALIENS_ROWS;
 
     // Percorre os lasers disponives para os aliens
     for (laser_index = 1; laser_index < MAX_LASERS; laser_index++) {
 
-        // Se o alien gerado pelo rand estiver morto, mude para o ultimo vivo
-        if (ALIENS[rand_alien][LAST_ALIVE_ROW].isAlive == FALSE) {
-            rand_alien = LAST_ALIVE_ALIEN;
-        }
-
         // Movimenta o laser para baixo se esta dentro das bordas
-        if (LASER_POS[laser_index].y < BORDER_AREA.y2 - 1) {
+        if ( (LASER_POS[laser_index].y < BORDER_AREA.y2 - 1) &&
+             (LASER_POS[laser_index].x > BORDER_AREA.x1) ) {
             LASER_POS[laser_index].y += 1;
-        } else {
-            // Laser volta embaixo dos aliens
-            LASER_POS[laser_index].y = ALIENS[rand_alien][LAST_ALIVE_ROW].pos.y + 1;
-            LASER_POS[laser_index].x = ALIENS[rand_alien][LAST_ALIVE_ROW].pos.x + 1;
+        }
+        else if (ALIENS[rand_col][aliens_index[rand_col]].isAlive) {
+            // Laser volta embaixo dos alien vivo gerado pelo rand
+            LASER_POS[laser_index].y = ALIENS[rand_col][aliens_index[rand_col]].pos.y + 1;
+            LASER_POS[laser_index].x = ALIENS[rand_col][aliens_index[rand_col]].pos.x + 1;
+        }
+        else {
+            // Se o alien gerado pelo rand estiver morto, mude para o ultimo vivo da ultima coluna
+            LASER_POS[laser_index].y = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.y + 1;
+            LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.x + 1;
         }
     }
 
