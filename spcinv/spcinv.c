@@ -94,6 +94,9 @@ void initLasers() {
 void play() {
     // Enquanto nao for gameover...
     while (GAME_STATUS) {
+        // Renderiza
+        render();
+
         // Pega qual tecla esta sendo pressionada
         getPressedKey();
 
@@ -106,11 +109,10 @@ void play() {
             aliensShoot();
         }
 
-        // Renderiza
-        render();
-
         // Incrementa o GLOBALTIME
         GLOBALTIME++;
+
+        aliensLife();
 
         // Tempo de 'recarga'
         usleep(DELAY);
@@ -171,14 +173,14 @@ void drawBorder() {
 
     // Bordas Verticais
     for (i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++) {
-        mvprintw(i, BORDER_AREA.x1, BORDA);
-        mvprintw(i, BORDER_AREA.x2, BORDA);
+        mvprintw(i, BORDER_AREA.x1, BORDER);
+        mvprintw(i, BORDER_AREA.x2, BORDER);
     }
 
     // Bordas Horizontais
     for (i = BORDER_AREA.x1; i <= BORDER_AREA.x2; i++) {
-        mvprintw(BORDER_AREA.y1, i, BORDA);
-        mvprintw(BORDER_AREA.y2, i, BORDA);
+        mvprintw(BORDER_AREA.y1, i, BORDER);
+        mvprintw(BORDER_AREA.y2, i, BORDER);
     }
 }
 
@@ -292,34 +294,6 @@ void aliensMovement() {
     // Variaveis de loop
     int i, j;
 
-    // Verifica colisoes com laser do player
-    for (i = 0; i < ALIENS_ROWS; i++) {
-        for (j = 0; j < ALIENS_COLUMNS; j++) {
-            // Esquerda - Meio - Direita
-            if ( ((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
-                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
-                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
-
-                if (ALIENS[i][j].isAlive) {
-                    ALIENS[i][j].isAlive = FALSE;
-
-                    // Laser volta 'em cima' do player apos acertar um alien
-                    LASER_POS[0].y = PLAYER_POS.y;
-                    LASER_POS[0].x = PLAYER_POS.x + 1;
-                    IS_PLAYER_SHOOTING = FALSE;
-
-                    // Incrementa o score em + 10 pontos
-                    SCORE += KILL_SCORE;
-                }
-
-                // Se todos os 25 aliens foram atingidos -> Vitoria
-                if (SCORE == (ALIENS_COLUMNS * ALIENS_ROWS * KILL_SCORE)) {
-                    gameOver(TRUE);
-                }
-            }
-        }
-    }
-
     // Movimentacao dos aliens
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
@@ -362,7 +336,41 @@ void aliensMovement() {
     }
 }
 
-void lasersMovement() {
+void aliensLife() {
+    // Variaveis de loop
+    int i, j;
+
+    // Verifica colisoes com laser do player
+    for (i = 0; i < ALIENS_ROWS; i++) {
+        for (j = 0; j < ALIENS_COLUMNS; j++) {
+            // Esquerda - Meio - Direita
+            if ( ((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
+                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
+                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
+                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
+
+                if (ALIENS[i][j].isAlive) {
+                    ALIENS[i][j].isAlive = FALSE;
+
+                    // Laser volta 'em cima' do player apos acertar um alien
+                    LASER_POS[0].y = PLAYER_POS.y;
+                    LASER_POS[0].x = PLAYER_POS.x + 1;
+                    IS_PLAYER_SHOOTING = FALSE;
+
+                    // Incrementa o score em + 10 pontos
+                    SCORE += KILL_SCORE;
+                }
+
+                // Se todos os 25 aliens foram atingidos -> Vitoria
+                if (SCORE == (ALIENS_COLUMNS * ALIENS_ROWS * KILL_SCORE)) {
+                    gameOver(TRUE);
+                }
+            }
+        }
+    }
+}
+
+void playerLaser() {
     // Movimenta o laser para cima se esta dentro das bordas
     if (LASER_POS[0].y > BORDER_AREA.y1) {
         if (GLOBALTIME % 5 == 0) {
@@ -384,14 +392,14 @@ void aliensShoot() {
     // Gera varios rands em um curto intervalo de tempo
     struct timeval t1;
     gettimeofday(&t1, NULL);
-    srand(t1.tv_usec * t1.tv_sec);
+    srand((unsigned int)(t1.tv_usec * t1.tv_sec));
 
     // Verifica qual a fileira com aliens vivos mais proxima do player
     LAST_ALIVE_ROW = 0;
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             if (ALIENS[i][j].isAlive && j >= LAST_ALIVE_ROW) {
-                LAST_ALIVE_ROW = j;
+                LAST_ALIVE_ROW = (unsigned)j;
             }
         }
     }
@@ -399,7 +407,7 @@ void aliensShoot() {
     LAST_ALIVE_ALIEN = 0;
     for (i = 0; i < ALIENS_COLUMNS; i++) {
         if (ALIENS[i][LAST_ALIVE_ROW].isAlive && i >= LAST_ALIVE_ALIEN) {
-            LAST_ALIVE_ALIEN = i;
+            LAST_ALIVE_ALIEN = (unsigned)i;
         }
     }
 
@@ -450,7 +458,7 @@ void playerShoot() {
     }
 
     if (IS_PLAYER_SHOOTING) {
-        lasersMovement();
+        playerLaser();
     }
 }
 

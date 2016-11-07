@@ -15,7 +15,7 @@
 #define KILL_SCORE 10
 
 // Como a borda deve ser printada
-#define BORDA "*"
+#define BORDER "*"
 
 // Tamanho minimo da window
 #define MIN_WINX 80
@@ -97,14 +97,17 @@ void playerMovement();
 // Detecta colisoes com a parede e modifica o ALIENS_DIRECTION
 void aliensMovement();
 
-// Detecta se o jogador quer atirar e chama lasersMovement()
+// Verifica aliens vs lasers
+void aliensLife();
+
+// Detecta se o jogador quer atirar e chama playerLaser()
 void playerShoot();
 
 // Desenha os tiros dos aliens
 void aliensShoot();
 
 // Movimenta os lasers
-void lasersMovement();
+void playerLaser();
 
 // Renderiza
 // Chama as funcoes draw*() a cada loop
