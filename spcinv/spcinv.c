@@ -443,10 +443,6 @@ void aliensShoot() {
             LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.x + 1;
         }
     }
-
-    // TODO: apenas 2 lasers dos 3 definidos para os aliens estao funcionando
-    // TODO: corrigir bugs de colisoes (principalmente laser - aliens)
-    // TODO: permitir que o player ande e atire ao mesmo tempo
 }
 
 void playerShoot() {
