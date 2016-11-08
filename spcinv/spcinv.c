@@ -71,26 +71,18 @@ static void initAliens() {
 }
 
 static void initLasers() {
-    int laser_index;
 
     // Laser[0] comeca 'em cima' do player
     LASER_POS[0].x = PLAYER_POS.x + 1;
     LASER_POS[0].y = PLAYER_POS.y + 1;
 
-    // Lasers dos aliens comecam embaixo dos aliens
-    for (laser_index = 1; laser_index < MAX_LASERS; laser_index++) {
-        // TODO: mudar [1] para laser_index sem bugar os lasers
-        LASER_POS[1].y = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.y + 1;
-        LASER_POS[1].x = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.x + 1;
-    }
-
-    /* Posicoes Iniciais Teste
-    LASER_POS[1].y = ALIENS[0][ALIENS_COLUMNS - 1].pos.y + 1;
+    // Posicoes Iniciais
+    LASER_POS[1].y = ALIENS[0][ALIENS_COLUMNS - 1].pos.y + 11;
     LASER_POS[1].x = ALIENS[0][ALIENS_COLUMNS - 1].pos.x + 1;
-    LASER_POS[2].y = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.y + 1;
+    LASER_POS[2].y = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.y + 6;
     LASER_POS[2].x = ALIENS[ALIENS_ROWS / 2][ALIENS_COLUMNS - 1].pos.x + 1;
     LASER_POS[3].y = ALIENS[ALIENS_ROWS - 1][ALIENS_COLUMNS - 1].pos.y + 1;
-    LASER_POS[3].x = ALIENS[ALIENS_ROWS - 1][ALIENS_COLUMNS - 1].pos.x + 1;*/
+    LASER_POS[3].x = ALIENS[ALIENS_ROWS - 1][ALIENS_COLUMNS - 1].pos.x + 1;
 }
 
 extern void startSpaceInvaders() {
@@ -108,7 +100,7 @@ extern void startSpaceInvaders() {
         playerMovement();
         playerShoot();
 
-        if (GLOBALTIME % 5 == 0) {
+        if (GLOBALTIME % 10 == 0) {
             aliensMovement();
             aliensShoot();
         }
