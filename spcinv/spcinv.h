@@ -61,73 +61,75 @@ typedef struct components {
 } component;
 
 // Inicia o jogo e configura o ncurses
-void initGame();
+static void initGame();
 
 // Define a posicao inicial do player
-void initPlayer();
+static void initPlayer();
 
 // Inicializa a matriz dos aliens
-void initAliens();
+static void initAliens();
 
 // Inicia os lasers nas suas posicoes
-void initLasers();
+static void initLasers();
 
 // Comeca o loop do jogo
 // Chama a funcao getPressedKey()
 // Chama a funcao getWinSize()
 // Chama as funcoes de movimento
-void play();
+extern void startSpaceInvaders();
 
 // Pega a tecla pressionada no momento e manda para PRESSED_KEY
-void getPressedKey();
+static void getPressedKey();
 
 // Pega o tamanho da tela atual e manda para WIN_SIZE
-void getWinSize();
+static void getWinSize();
 
 // Para o jogo, mostrando uma mensagem se ganhou
 // ou nao. Para o ncurses apos isso
-void gameOver(bool winner);
+static void gameOver(bool winner);
 
 // Movimenta o player, acoes baseadas em PRESSED_KEY
 // A posicao eh baseada em PLAYER_POS
-// Detecta colisoes, muda a posicao do player se necessario
-void playerMovement();
+static void playerMovement();
 
 // Movimenta os aliens
 // Detecta colisoes com a parede e modifica o ALIENS_DIRECTION
-void aliensMovement();
+static void aliensMovement();
+
+// Detecta colisoes do player com os aliens ou lasers dos aliens
+static void playerLife();
 
 // Verifica aliens vs lasers
-void aliensLife();
+static void aliensLife();
 
 // Detecta se o jogador quer atirar e chama playerLaser()
-void playerShoot();
+static void playerShoot();
 
 // Desenha os tiros dos aliens
-void aliensShoot();
+static void aliensShoot();
 
 // Movimenta os lasers
-void playerLaser();
+static void playerLaser();
 
 // Renderiza
 // Chama as funcoes draw*() a cada loop
-void render();
+static void render();
 
 // Desenha as bordas do jogo
 // Manda o tamanho da borda para BORDER_SIZE
-void drawBorder();
+static void drawBorder();
 
 // Desenha uma matriz de aliens
-void drawAliens();
+static void drawAliens();
 
 // Desenha um player na posicao dada
-void drawPlayer();
+static void drawPlayer();
 
 // Desenha os lasers em suas posicoes
-void drawLasers();
+static void drawLasers();
 
 // Movimenta um componente baseado em sua direcao se ele estiver vivo
-void moveComponent(component *comp);
+static void moveComponent(component *comp);
 
 /* Variaveis globais */
 
@@ -176,6 +178,6 @@ unsigned long int GLOBALTIME;
 // Usado para debug
 #ifdef DEBUG
 
-void drawDebug();
+static void drawDebug();
 
 #endif
