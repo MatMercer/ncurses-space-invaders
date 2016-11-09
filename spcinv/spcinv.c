@@ -360,6 +360,10 @@ static void playerLife() {
             (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 2)) {   // Baixo Direita
             // Player perde uma vida, se nao restar nenhuma -> gameOver
             PLAYER_LIVES -= 1;
+
+            // Remove o laser colidido, evitando que o player perca mais de uma vida de uma vez
+            LASER_POS[laser_index].x = -1;
+            LASER_POS[laser_index].y = -1;
             break;
         }
     }
