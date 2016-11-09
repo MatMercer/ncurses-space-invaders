@@ -1,9 +1,6 @@
 #include "./spcinv/spcinv.h"
 
 int main() {
-    initGame();
-
-    play();
-
+    startSpaceInvaders();
     return 0;
 }
