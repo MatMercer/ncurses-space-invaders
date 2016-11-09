@@ -14,9 +14,6 @@
 // Pontuacao por alien atingido
 #define KILL_SCORE 10
 
-// Como a borda deve ser printada
-#define BORDER "*"
-
 // Tamanho minimo da window
 #define MIN_WINX 90
 #define MIN_WINY 45
@@ -171,6 +168,9 @@ int PRESSED_KEY;
 
 // Um timer global, eh incrementado a cada loop da funcao play()
 unsigned long int GLOBALTIME;
+
+// Como a borda deve se parecer
+char BORDER[1];
 
 // Usado para debug
 #ifdef DEBUG

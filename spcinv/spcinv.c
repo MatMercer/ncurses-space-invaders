@@ -89,6 +89,9 @@ extern void startSpaceInvaders() {
     initGame();
     // Enquanto nao for gameover...
     while (GAME_STATUS) {
+        if(GLOBALTIME % 30 == 0) {
+            BORDER[0] = '*';
+        }
 
         // Renderiza
         render();
@@ -253,7 +256,7 @@ static void drawDebug() {
              dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y, GAME_STATUS);
 }
 
-#endif
+#endif //DEBUG
 
 static void playerMovement() {
     // Manda o player sempre para a parte de baixo da borda
@@ -360,6 +363,9 @@ static void playerLife() {
             (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 2)) {   // Baixo Direita
             // Player perde uma vida, se nao restar nenhuma -> gameOver
             PLAYER_LIVES -= 1;
+
+            // Notifica que o player levou um hit
+            BORDER[0] = 'X';
 
             // Remove o laser colidido, evitando que o player perca mais de uma vida de uma vez
             LASER_POS[laser_index].x = -1;
@@ -504,7 +510,7 @@ static void gameOver(bool winner) {
         // Debug
 #ifdef DEBUG
         drawDebug();
-#endif
+#endif //DEBUG
 
         // Desenha a borda
         drawBorder();
