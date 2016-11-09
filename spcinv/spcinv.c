@@ -44,7 +44,7 @@ static void initPlayer() {
     // O player comeca no meio e embaixo
     PLAYER_POS.x = WIN_SIZE.x / 2;
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
-    PLAYER_LIVES = 300;
+    PLAYER_LIVES = 3;
 }
 
 static void initAliens() {
@@ -359,7 +359,7 @@ static void playerLife() {
             (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 1) ||   // Baixo Meio
             (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 2)) {   // Baixo Direita
             // Player perde uma vida, se nao restar nenhuma -> gameOver
-                PLAYER_LIVES -= 1;
+            PLAYER_LIVES -= 1;
             break;
         }
     }
@@ -418,6 +418,7 @@ static void aliensShoot() {
             }
         }
     }
+
     // Verifica qual o ultimo alien vivo da ultima fileira
     LAST_ALIVE_ALIEN = 0;
     for (i = 0; i < ALIENS_COLUMNS; i++) {
@@ -459,18 +460,18 @@ static void aliensShoot() {
 }
 
 static void playerShoot() {
-    // Atire se o player apertar espaco e nao houver outro disparo em andamento
-    if ((PRESSED_KEY == ' ') && (IS_PLAYER_SHOOTING == FALSE)) {
-        IS_PLAYER_SHOOTING = TRUE;
-        // Define o x do laser apenas uma vez, corrige o bug de desvio do tiro
-        LASER_POS[0].x = PLAYER_POS.x + 1;
-    }
-
     if (IS_PLAYER_SHOOTING) {
         playerLaser();
     } else {
         // Laser volta 'em cima' do player se nao estiver subindo
         LASER_POS[0].y = PLAYER_POS.y + 1;
+        LASER_POS[0].x = PLAYER_POS.x + 1;
+    }
+
+    // Atire se o player apertar espaco e nao houver outro disparo em andamento
+    if ((PRESSED_KEY == ' ') && (IS_PLAYER_SHOOTING == FALSE)) {
+        IS_PLAYER_SHOOTING = TRUE;
+        // Define o x do laser apenas uma vez, corrige o bug de desvio do tiro
         LASER_POS[0].x = PLAYER_POS.x + 1;
     }
 }
@@ -505,12 +506,16 @@ static void gameOver(bool winner) {
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "   You %s with %d Points! Press q to exit!",
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s! [%d Points] q to exit or r to reset!",
                  winner ? "won" : "lost", SCORE);
         mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "  ___   _   __  __ ___    _____   _____ ___");
         mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, " / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
         mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x, "| (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
         mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x, " \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
+
+        if (PRESSED_KEY == 'r' || PRESSED_KEY == 'R') {
+            startSpaceInvaders();
+        }
 
         // Movimenta a mensagem de gameover, verificando colisoes
         if (GLOBALTIME % 25 == 0) {
