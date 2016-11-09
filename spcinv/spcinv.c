@@ -89,6 +89,7 @@ extern void startSpaceInvaders() {
     initGame();
     // Enquanto nao for gameover...
     while (GAME_STATUS) {
+        // Volta a borda para o seu estado original, caso ela nao esteja
         if(GLOBALTIME % 30 == 0) {
             BORDER[0] = '*';
         }
