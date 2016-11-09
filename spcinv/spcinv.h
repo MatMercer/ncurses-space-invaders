@@ -34,9 +34,6 @@
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 4
 
-// Macro para encontrar qual char esta em determinada posicao da tela "Screen Char"
-#define SCRCHAR(y, x) ((mvinch(y, x) & A_CHARTEXT))
-
 /* Definicoes e construtores */
 
 // Struct de posicao
@@ -133,9 +130,6 @@ static void moveComponent(component *comp);
 
 /* Variaveis globais */
 
-// vec2 zerado, evita lixo de memoria
-// const vec2 INIT_VEC2; // not used
-
 // Tamanho da tela
 vec2 WIN_SIZE;
 
@@ -153,6 +147,9 @@ vec2 LASER_POS[MAX_LASERS];
 
 // Diz se existe um disparo do player em andamento
 bool IS_PLAYER_SHOOTING;
+
+// Player possui vidas, que valem em colisoes com lasers
+unsigned int PLAYER_LIVES;
 
 // Score
 unsigned int SCORE;

@@ -44,6 +44,7 @@ static void initPlayer() {
     // O player comeca no meio e embaixo
     PLAYER_POS.x = WIN_SIZE.x / 2;
     PLAYER_POS.y = BORDER_AREA.y2 - 2;
+    PLAYER_LIVES = 300;
 }
 
 static void initAliens() {
@@ -71,7 +72,6 @@ static void initAliens() {
 }
 
 static void initLasers() {
-
     // Laser[0] comeca 'em cima' do player
     LASER_POS[0].x = PLAYER_POS.x + 1;
     LASER_POS[0].y = PLAYER_POS.y + 1;
@@ -100,7 +100,7 @@ extern void startSpaceInvaders() {
         playerMovement();
         playerShoot();
 
-        if (GLOBALTIME % 10 == 0) {
+        if (GLOBALTIME % 8 == 0) {
             aliensMovement();
             aliensShoot();
         }
@@ -124,16 +124,13 @@ static void render() {
     clear();
 
     // Contagem de Pontos
-    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "SCORE: %u", SCORE);
+    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES: %u", PLAYER_LIVES);
+    mvprintw(BORDER_AREA.y1 -2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
 
 #ifdef DEBUG
     // Debug
     drawDebug();
 #endif
-
-    // Tamanho da tela recalculado a cada loop (responsivo)
-    // Por enquanto desativado, quebra o jogo
-    // getWinSize();
 
     // Renderiza os objetos do jogo
     drawBorder();
@@ -218,7 +215,6 @@ static void drawLasers() {
 }
 
 static void moveComponent(component *comp) {
-    // Por enquanto nao faz sentido um componente morto se mover :v
     if (comp->isAlive) {
         // += eh um macete para direcao no terminal
         if (comp->direction == RIGHT || comp->direction == LEFT) {
@@ -352,13 +348,23 @@ static void aliensLife() {
 
 static void playerLife() {
     // Variaveis de loop
-    int i, j;
+    int i, j, laser_index;
 
-    // Detecta colisões com tiros em todas as partes "renderizaveis" do player
-    if (SCRCHAR(PLAYER_POS.y, PLAYER_POS.x + 1) == '|' ||       // Cima
-        SCRCHAR(PLAYER_POS.y + 1, PLAYER_POS.x) == '|' ||       // Baixo Esquerda
-        SCRCHAR(PLAYER_POS.y + 1, PLAYER_POS.x + 1) == '|' ||   // Baixo Meio
-        SCRCHAR(PLAYER_POS.y + 1, PLAYER_POS.x + 2) == '|') {   // Baixo Direita
+    // Percorre os lasers disponives para os aliens
+    for (laser_index = 1; laser_index < MAX_LASERS; laser_index++) {
+
+        // Detecta colisões com tiros em todas as partes "renderizaveis" do player
+        if ((LASER_POS[laser_index].y == PLAYER_POS.y && LASER_POS[laser_index].x == PLAYER_POS.x + 1) ||       // Cima
+            (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x) ||       // Baixo Esquerda
+            (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 1) ||   // Baixo Meio
+            (LASER_POS[laser_index].y == PLAYER_POS.y + 1 && LASER_POS[laser_index].x == PLAYER_POS.x + 2)) {   // Baixo Direita
+            // Player perde uma vida, se nao restar nenhuma -> gameOver
+                PLAYER_LIVES -= 1;
+            break;
+        }
+    }
+
+    if (PLAYER_LIVES == 0) {
         gameOver(FALSE);
     }
 
