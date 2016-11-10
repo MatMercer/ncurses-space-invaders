@@ -51,6 +51,17 @@ static void initAliens() {
     // Variaveis de loop
     int i, j;
 
+    if (WIN_SIZE.x >= 130) {
+        ALIENS_ROWS = 9;
+        ALIENS_COLUMNS = 9;
+    } else if (WIN_SIZE.x >= 110) {
+        ALIENS_ROWS = 7;
+        ALIENS_COLUMNS = 7;
+    } else {
+        ALIENS_ROWS = 5;
+        ALIENS_COLUMNS = 5;
+    }
+
     // Aloca os aliens
     ALIENS = calloc(ALIENS_ROWS, sizeof(component *));
     for (i = 0; i < ALIENS_ROWS; i++) {
@@ -132,7 +143,7 @@ static void render() {
     // Contagem de Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES:");
     for (i = 1; i <= PLAYER_LIVES; i++) {
-        mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ", PLAYER_LIVES);
+        mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ");
     }
     mvprintw(BORDER_AREA.y1 -2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
 

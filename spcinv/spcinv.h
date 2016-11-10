@@ -18,10 +18,6 @@
 #define MIN_WINX 90
 #define MIN_WINY 45
 
-// Aliens
-#define ALIENS_ROWS 5
-#define ALIENS_COLUMNS 5
-
 // Macro para a direcao dos movimentos
 #define RIGHT 1
 #define LEFT -1
@@ -150,6 +146,11 @@ unsigned int PLAYER_LIVES;
 
 // Score
 unsigned int SCORE;
+
+/* Aliens */
+// Linhas e Colunas
+unsigned int ALIENS_ROWS;
+unsigned int ALIENS_COLUMNS;
 
 // Direcao dos aliens, muda de acordo com as colisoes
 int ALIENS_DIRECTION;
