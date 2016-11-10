@@ -124,11 +124,16 @@ extern void startSpaceInvaders() {
 }
 
 static void render() {
+    int i;
+
     // Limpa o console
     clear();
 
     // Contagem de Pontos
-    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES: %u", PLAYER_LIVES);
+    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES:");
+    for (i = 1; i <= PLAYER_LIVES; i++) {
+        mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ", PLAYER_LIVES);
+    }
     mvprintw(BORDER_AREA.y1 -2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
 
 #ifdef DEBUG
@@ -517,13 +522,14 @@ static void gameOver(bool winner) {
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s! [%d Points] q to exit or r to reset!",
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s! [%d Points] q to quit or r to reset",
                  winner ? "won" : "lost", SCORE);
         mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "  ___   _   __  __ ___    _____   _____ ___");
         mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, " / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");
         mvprintw(gmOverMsgPos.y + 2, gmOverMsgPos.x, "| (_ |/ _ \\| |\\/| | _|  | (_) \\ V /| _||   /");
         mvprintw(gmOverMsgPos.y + 3, gmOverMsgPos.x, " \\___/_/ \\_\\_|  |_|___|  \\___/ \\_/ |___|_|_\\");
 
+        // Se o player apertar r ou R -> reinicie o jogo
         if (PRESSED_KEY == 'r' || PRESSED_KEY == 'R') {
             startSpaceInvaders();
         }
