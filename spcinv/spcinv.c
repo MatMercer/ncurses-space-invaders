@@ -593,7 +593,7 @@ static void gameOver(bool winner) {
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "You %s! [%d Points] q to quit or r to reset",
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "  You %s! [%d Points] q to quit r to reset",
                  winner ? "won" : "lost", SCORE);
         mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "  ___   _   __  __ ___    _____   _____ ___");
         mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, " / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");

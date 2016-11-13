@@ -31,13 +31,16 @@
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 4
 
+// Tempo de recarga dos lasers dos aliens
+#define ALIEN_SHOT_DELAY 30
+
 // Aonde os sfx estao
 #define SFX_PATH "./spcinv/sfx/"
 
 // Como eles sao tocados
 #define SFX_COMMAND "play -q"
 
-// Qua extensão eles usam
+// Qual extensão eles usam
 #define SFX_EXTENSION ".wav"
 
 /* Definicoes e construtores */
@@ -75,10 +78,7 @@ static void initAliens();
 // Inicia os lasers nas suas posicoes
 static void initLasers();
 
-// Comeca o loop do jogo
-// Chama a funcao getPressedKey()
-// Chama a funcao getWinSize()
-// Chama as funcoes de movimento
+// Comeca o loop do jogo que chama as funcoes de movimento, acoes e colisoes
 extern void startSpaceInvaders();
 
 // Pega a tecla pressionada no momento e manda para PRESSED_KEY
@@ -87,16 +87,13 @@ static void getPressedKey();
 // Pega o tamanho da tela atual e manda para WIN_SIZE
 static void getWinSize();
 
-// Para o jogo, mostrando uma mensagem se ganhou
-// ou nao. Para o ncurses apos isso
+// Para o jogo, mostrando uma mensagem se ganhou ou nao, para o ncurses apos isso
 static void gameOver(bool winner);
 
-// Movimenta o player, acoes baseadas em PRESSED_KEY
-// A posicao eh baseada em PLAYER_POS
+// Movimenta o player por meio de PLAYER_POS, acoes baseadas em PRESSED_KEY
 static void playerMovement();
 
-// Movimenta os aliens
-// Detecta colisoes com a parede e modifica o ALIENS_DIRECTION
+// Movimenta os aliens, detecta colisoes com a parede e modifica o ALIENS_DIRECTION
 static void aliensMovement();
 
 // Detecta colisoes do player com os aliens ou lasers dos aliens
@@ -114,12 +111,10 @@ static void aliensShoot();
 // Movimenta os lasers
 static void playerLaser();
 
-// Renderiza
-// Chama as funcoes draw*() a cada loop
+// Renderiza e chama as funcoes draw*() a cada loop
 static void render();
 
-// Desenha as bordas do jogo
-// Manda o tamanho da borda para BORDER_SIZE
+// Desenha as bordas do jogo e manda o tamanho da borda para BORDER_SIZE
 static void drawBorder();
 
 // Desenha uma matriz de aliens
@@ -149,14 +144,19 @@ vec2 WIN_SIZE;
 // Area da borda
 area BORDER_AREA;
 
+// True para normal, false para gameover
+bool GAME_STATUS;
+
+// Um timer global, eh incrementado a cada loop da funcao startSpaceInvaders()
+unsigned long int GLOBALTIME;
+
+// Como a borda deve se parecer
+char BORDER[1];
+
+/* Player */
+
 // Posicao do player
 vec2 PLAYER_POS;
-
-// Posicao dos aliens
-component **ALIENS;
-
-// Posicao dos lasers
-vec2 LASER_POS[MAX_LASERS];
 
 // Diz se existe um disparo do player em andamento
 bool IS_PLAYER_SHOOTING;
@@ -164,34 +164,31 @@ bool IS_PLAYER_SHOOTING;
 // Player possui vidas, que valem em colisoes com lasers
 unsigned int PLAYER_LIVES;
 
+// Qual tecla esta sendo pressionada no momento
+int PRESSED_KEY;
+
 // Score
 unsigned int SCORE;
 
 /* Aliens */
+
 // Linhas e Colunas
-unsigned int ALIENS_ROWS;
-unsigned int ALIENS_COLUMNS;
+unsigned int ALIENS_ROWS, ALIENS_COLUMNS;
+
+// Posicao dos aliens
+component **ALIENS;
 
 // Direcao dos aliens, muda de acordo com as colisoes
 int ALIENS_DIRECTION;
 
-// Armazena o indice da fileira de aliens mais proxima do player
-unsigned int LAST_ALIVE_ROW;
+// Armazena o indice da ultima fileira de aliens e ultimo alien
+unsigned int LAST_ALIVE_ROW, LAST_ALIVE_ALIEN;
 
-// Ultimo alien vivo da ultima fileira
-unsigned int LAST_ALIVE_ALIEN;
+// Tempo do ultimo laser disparado, baseado em GLOBALTIME
+unsigned long int LAST_SHOT_TICK;
 
-// True para normal, false para gameover
-bool GAME_STATUS;
-
-// Qual tecla esta sendo pressionada no momento
-int PRESSED_KEY;
-
-// Um timer global, eh incrementado a cada loop da funcao play()
-unsigned long int GLOBALTIME;
-
-// Como a borda deve se parecer
-char BORDER[1];
+// Posicao dos lasers
+vec2 LASER_POS[MAX_LASERS];
 
 // Usado para estocar o diretorio atual do executavel
 // 4096 é baseado no tamanho máximo de bytes que um filepath pode ter no sistema de arquivos EXT
