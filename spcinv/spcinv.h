@@ -1,3 +1,7 @@
+
+#ifndef SPACE_INVADERS_GAME_SPCINV_H
+#define SPACE_INVADERS_GAME_SPCINV_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -178,4 +182,6 @@ char BORDER[1];
 
 static void drawDebug();
 
-#endif
+#endif // DEBUG
+
+#endif // SPACE_INVADERS_GAME_SPCINV_H
