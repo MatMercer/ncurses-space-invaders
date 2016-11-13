@@ -31,6 +31,15 @@
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 4
 
+// Aonde os sfx estao
+#define SFX_PATH "./spcinv/sfx/"
+
+// Como eles sao tocados
+#define SFX_COMMAND "play -q"
+
+// Qua extensão eles usam
+#define SFX_EXTENSION ".wav"
+
 /* Definicoes e construtores */
 
 // Struct de posicao
@@ -125,6 +134,13 @@ static void drawLasers();
 // Movimenta um componente baseado em sua direcao se ele estiver vivo
 static void moveComponent(component *comp);
 
+// Usado para tocar um sfx
+static void playSound(char *name);
+
+// Usado para descobrir aonde o executavel esta
+// Baseado em http://advancedlinuxprogramming.com/listings/chapter-7/get-exe-path.c
+static void getWorkingDirectory (char* buffer, size_t size);
+
 /* Variaveis globais */
 
 // Tamanho da tela
@@ -176,6 +192,10 @@ unsigned long int GLOBALTIME;
 
 // Como a borda deve se parecer
 char BORDER[1];
+
+// Usado para estocar o diretorio atual do executavel
+// 4096 é baseado no tamanho máximo de bytes que um filepath pode ter no sistema de arquivos EXT
+char WORKING_DIR[4096];
 
 // Usado para debug
 #ifdef DEBUG

@@ -1,7 +1,15 @@
+#include <unistd.h>
+#include <string.h>
 #include "spcinv.h"
 
 
 static void initGame() {
+    // Pega o local do executavel
+    getWorkingDirectory(WORKING_DIR, 4096);
+
+    // SFX
+    playSound("init_game");
+
     // Inicializa o ncurses
     initscr();
 
@@ -101,7 +109,7 @@ extern void startSpaceInvaders() {
     // Enquanto nao for gameover...
     while (GAME_STATUS) {
         // Volta a borda para o seu estado original, caso ela nao esteja
-        if(GLOBALTIME % 30 == 0) {
+        if (GLOBALTIME % 30 == 0) {
             BORDER[0] = '*';
         }
 
@@ -145,7 +153,7 @@ static void render() {
     for (i = 1; i <= PLAYER_LIVES; i++) {
         mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ");
     }
-    mvprintw(BORDER_AREA.y1 -2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
+    mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
 
 #ifdef DEBUG
     // Debug
@@ -160,6 +168,26 @@ static void render() {
 
     // Manda para o console
     refresh();
+}
+
+static void getWorkingDirectory(char *buffer, size_t size) {
+    // Pega o diretorio atual do executavel
+    readlink("/proc/self/exe", buffer, size); // /home/user/spaceinvaders
+
+    // Usado para tirar o nome do executavel
+    char *last_path;
+
+    // Procura pelo path antes do nome do executavel
+    last_path = strrchr(buffer, '/'); // /home/user/spaceinvaders
+    //                                             ^ <- retorna o ponteiro que aponta aqui
+
+    // Evita deletar o ultimo "/" da string
+    ++last_path; // /home/user/spaceinvaders
+    //                         ^
+
+    // Corta a string
+    *last_path = '\0'; // /home/user/\0paceinvaders
+    //                                ^ <- string acaba aqui
 }
 
 static void getPressedKey() {
@@ -322,7 +350,7 @@ static void aliensMovement() {
                     }
                     break;
                 }
-                // Colisao com a borda esquerda
+                    // Colisao com a borda esquerda
                 else if (ALIENS[i][j].pos.x - 2 < BORDER_AREA.x1) {
                     if (ALIENS_DIRECTION != DOWN) {
                         ALIENS_DIRECTION = DOWN;
@@ -345,9 +373,9 @@ static void aliensLife() {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
             // Esquerda - Meio - Direita
             if (((LASER_POS[0].x == ALIENS[i][j].pos.x) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
-                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
-                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
-                 ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
+                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y + 1)) ||
+                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 1) && (LASER_POS[0].y == ALIENS[i][j].pos.y)) ||
+                ((LASER_POS[0].x == ALIENS[i][j].pos.x + 2) && (LASER_POS[0].y == ALIENS[i][j].pos.y))) {
 
                 if (ALIENS[i][j].isAlive) {
                     ALIENS[i][j].isAlive = FALSE;
@@ -355,6 +383,9 @@ static void aliensLife() {
 
                     // Incrementa o score em + 10 pontos
                     SCORE += KILL_SCORE;
+
+                    // SFX
+                    playSound("aliens_hit");
                 }
 
                 // Se todos os X aliens foram atingidos -> Vitoria
@@ -364,6 +395,16 @@ static void aliensLife() {
             }
         }
     }
+}
+
+static void playSound(char *name) {
+    // Baseado no tamanho maximo do path EXT | http://serverfault.com/questions/9546/filename-length-limits-on-linux
+    char cmd[4096];
+
+    // Cria o comando
+    sprintf(cmd, "%s %s%s%s%s%s", SFX_COMMAND, WORKING_DIR, SFX_PATH, name, SFX_EXTENSION, " &"); // " &" no final roda o comando em background
+
+    system(cmd);
 }
 
 static void playerLife() {
@@ -387,6 +428,9 @@ static void playerLife() {
             // Remove o laser colidido, evitando que o player perca mais de uma vida de uma vez
             LASER_POS[laser_index].x = -1;
             LASER_POS[laser_index].y = -1;
+
+            // SFX
+            playSound("player_hit");
             break;
         }
     }
@@ -403,7 +447,7 @@ static void playerLife() {
                 if ((ALIENS[i][j].pos.y == BORDER_AREA.y2 - 2) ||
                     ((ALIENS[i][j].pos.y + 1 == PLAYER_POS.y) && (ALIENS[i][j].pos.x == PLAYER_POS.x + 1)) ||       // Cima
                     ((ALIENS[i][j].pos.y + 1 == PLAYER_POS.y + 1) && (ALIENS[i][j].pos.x == PLAYER_POS.x)) ||       // Baixo Direita
-                    ((ALIENS[i][j].pos.y + 1 == PLAYER_POS.y + 1) && (ALIENS[i][j].pos.x == PLAYER_POS.x + 2)) ) {  // Baixo Esquerda
+                    ((ALIENS[i][j].pos.y + 1 == PLAYER_POS.y + 1) && (ALIENS[i][j].pos.x == PLAYER_POS.x + 2))) {  // Baixo Esquerda
                     gameOver(FALSE); // Fim de jogo - Derrota
                     break;
                 }
@@ -472,16 +516,22 @@ static void aliensShoot() {
 
         // Movimenta o laser para baixo se esta dentro das bordas
         if ((LASER_POS[laser_index].y < BORDER_AREA.y2 - 1) &&
-             (LASER_POS[laser_index].x > BORDER_AREA.x1)) {
+            (LASER_POS[laser_index].x > BORDER_AREA.x1)) {
             LASER_POS[laser_index].y += 1;
         } else if (ALIENS[rand_col][aliens_index[rand_col]].isAlive) {
             // Laser volta embaixo do alien vivo gerado pelo rand
             LASER_POS[laser_index].y = ALIENS[rand_col][aliens_index[rand_col]].pos.y + 1;
             LASER_POS[laser_index].x = ALIENS[rand_col][aliens_index[rand_col]].pos.x + 1;
+
+            // SFX
+            playSound("aliens_shoot");
         } else {
             // Se o alien gerado pelo rand estiver morto, mude para o ultimo vivo da ultima coluna
             LASER_POS[laser_index].y = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.y + 1;
             LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.x + 1;
+
+            // SFX
+            playSound("aliens_shoot");
         }
     }
 }
@@ -500,12 +550,22 @@ static void playerShoot() {
         IS_PLAYER_SHOOTING = TRUE;
         // Define o x do laser apenas uma vez, corrige o bug de desvio do tiro
         LASER_POS[0].x = PLAYER_POS.x + 1;
+
+        // SFX
+        playSound("player_shoot");
     }
 }
 
 static void gameOver(bool winner) {
     // Encerra o jogo
     GAME_STATUS = FALSE;
+
+    // SFX
+    if (winner) {
+        playSound("game_over_true");
+    } else {
+        playSound("game_over_false");
+    }
 
     // Posicao da mensagem
     vec2 gmOverMsgPos;
