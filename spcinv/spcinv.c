@@ -508,27 +508,27 @@ static void aliensShoot() {
         }
     }
 
-    // Define qual alien vai disparar, randomicamente
-    rand_col = rand() % ALIENS_ROWS;
-
     // Percorre os lasers disponives para os aliens
     for (laser_index = 1; laser_index < MAX_LASERS; laser_index++) {
+
+        // Define qual alien vai disparar, randomicamente
+        rand_col = rand() % ALIENS_ROWS;
 
         // Movimenta o laser para baixo se esta dentro das bordas
         if ((LASER_POS[laser_index].y < BORDER_AREA.y2 - 1) &&
             (LASER_POS[laser_index].x > BORDER_AREA.x1)) {
             LASER_POS[laser_index].y += 1;
-        } else if (ALIENS[rand_col][aliens_index[rand_col]].isAlive) {
+        } else if (ALIENS[rand_col][aliens_index[rand_col]].isAlive == FALSE) {
+            // Se o alien gerado pelo rand estiver morto, mude para o ultimo vivo da ultima coluna
+            LASER_POS[laser_index].y = ALIENS[LAST_ALIVE_ALIEN][LAST_ALIVE_ROW].pos.y + 1;
+            LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ALIEN][LAST_ALIVE_ROW].pos.x + 1;
+
+            // SFX
+            playSound("game_over_true");
+        } else {
             // Laser volta embaixo do alien vivo gerado pelo rand
             LASER_POS[laser_index].y = ALIENS[rand_col][aliens_index[rand_col]].pos.y + 1;
             LASER_POS[laser_index].x = ALIENS[rand_col][aliens_index[rand_col]].pos.x + 1;
-
-            // SFX
-            playSound("aliens_shoot");
-        } else {
-            // Se o alien gerado pelo rand estiver morto, mude para o ultimo vivo da ultima coluna
-            LASER_POS[laser_index].y = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.y + 1;
-            LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ROW][LAST_ALIVE_ALIEN].pos.x + 1;
 
             // SFX
             playSound("aliens_shoot");
@@ -593,7 +593,7 @@ static void gameOver(bool winner) {
         drawBorder();
 
         // Desenha a mensagem de gameover
-        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, "  You %s! [%d Points] q to quit r to reset",
+        mvprintw(gmOverMsgPos.y - 1, gmOverMsgPos.x, " You %s! [%d Points] q to quit r to reset",
                  winner ? "won" : "lost", SCORE);
         mvprintw(gmOverMsgPos.y, gmOverMsgPos.x, "  ___   _   __  __ ___    _____   _____ ___");
         mvprintw(gmOverMsgPos.y + 1, gmOverMsgPos.x, " / __| /_\\ |  \\/  | __|  / _ \\ \\ / / __| _ \\");

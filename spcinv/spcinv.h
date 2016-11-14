@@ -108,7 +108,7 @@ static void playerShoot();
 // Desenha os tiros dos aliens
 static void aliensShoot();
 
-// Movimenta os lasers
+// Movimenta o laser do player
 static void playerLaser();
 
 // Renderiza e chama as funcoes draw*() a cada loop
