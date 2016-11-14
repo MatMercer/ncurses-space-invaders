@@ -31,9 +31,6 @@
 // Define a quantidade de lasers no jogo
 #define MAX_LASERS 4
 
-// Tempo de recarga dos lasers dos aliens
-#define ALIEN_SHOT_DELAY 30
-
 // Aonde os sfx estao
 #define SFX_PATH "./spcinv/sfx/"
 
@@ -183,9 +180,6 @@ int ALIENS_DIRECTION;
 
 // Armazena o indice da ultima fileira de aliens e ultimo alien
 unsigned int LAST_ALIVE_ROW, LAST_ALIVE_ALIEN;
-
-// Tempo do ultimo laser disparado, baseado em GLOBALTIME
-unsigned long int LAST_SHOT_TICK;
 
 // Posicao dos lasers
 vec2 LASER_POS[MAX_LASERS];
