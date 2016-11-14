@@ -524,7 +524,7 @@ static void aliensShoot() {
             LASER_POS[laser_index].x = ALIENS[LAST_ALIVE_ALIEN][LAST_ALIVE_ROW].pos.x + 1;
 
             // SFX
-            playSound("game_over_true");
+            playSound("aliens_shoot");
         } else {
             // Laser volta embaixo do alien vivo gerado pelo rand
             LASER_POS[laser_index].y = ALIENS[rand_col][aliens_index[rand_col]].pos.y + 1;
