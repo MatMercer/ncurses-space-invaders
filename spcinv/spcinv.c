@@ -22,6 +22,10 @@ static void initGame() {
     keypad(stdscr, TRUE);
     // Desabilite o delay de espera para getch
     nodelay(stdscr, TRUE);
+    // Permite o uso de cores
+    start_color();
+    // Printa tudo em negrito
+    attron(A_BOLD);
 
     // Comeca a contagem do GLOBALTIME
     GLOBALTIME = 0;
@@ -226,11 +230,22 @@ static void getWinSize() {
 static void drawBorder() {
     int i;
 
+    // Cores da borda (Indice, Texto, Fundo)
+    init_pair(1, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+
     // Tamanho da area da borda
     BORDER_AREA.x1 = WIN_SIZE.x / 2 - WIN_SIZE.x / 3;
     BORDER_AREA.x2 = WIN_SIZE.x / 2 + WIN_SIZE.x / 3;
     BORDER_AREA.y1 = WIN_SIZE.y / 2 - WIN_SIZE.y / 3;
     BORDER_AREA.y2 = WIN_SIZE.y / 2 + WIN_SIZE.y / 3;
+
+    // Muda cor da borda para vermelho quando player for atingido
+    if (BORDER[0] == 'X') {
+        attron(COLOR_PAIR(2));
+    } else {
+        attron(COLOR_PAIR(1));
+    }
 
     // Bordas Verticais
     for (i = BORDER_AREA.y1; i < BORDER_AREA.y2; i++) {
@@ -243,15 +258,27 @@ static void drawBorder() {
         mvprintw(BORDER_AREA.y1, i, BORDER);
         mvprintw(BORDER_AREA.y2, i, BORDER);
     }
+    attroff(COLOR_PAIR(1));
+    attroff(COLOR_PAIR(2));
 }
 
 static void drawPlayer() {
+    // Cores do player (Indice, Texto, Fundo)
+    init_pair(3, COLOR_CYAN, COLOR_BLACK);
+    attron(COLOR_PAIR(3));
+
     mvprintw(PLAYER_POS.y, PLAYER_POS.x, " @");
     mvprintw(PLAYER_POS.y + 1, PLAYER_POS.x, "@@@");
+
+    attroff(COLOR_PAIR(3));
 }
 
 static void drawAliens() {
     int i, j;
+
+    // Cores dos aliens (Indice, Texto, Fundo)
+    init_pair(4, COLOR_GREEN, COLOR_BLACK);
+    attron(COLOR_PAIR(4));
 
     for (i = 0; i < ALIENS_ROWS; i++) {
         for (j = 0; j < ALIENS_COLUMNS; j++) {
@@ -261,6 +288,7 @@ static void drawAliens() {
             }
         }
     }
+    attroff(COLOR_PAIR(4));
 }
 
 static void drawLasers() {
@@ -442,7 +470,10 @@ static void playerLife() {
             PLAYER_LIVES -= 1;
 
             // Notifica que o player levou um hit
+
+            attron(COLOR_PAIR(4));
             BORDER[0] = 'X';
+            attroff(COLOR_PAIR(4));
 
             // Remove o laser colidido, evitando que o player perca mais de uma vida de uma vez
             LASER_POS[laser_index].x = -1;
