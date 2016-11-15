@@ -29,6 +29,9 @@ static void initGame() {
     // Jogo nao esta em gameover
     GAME_STATUS = TRUE;
 
+    // Efeitos sonoros ativados
+    SOUNDS_ENABLED = TRUE;
+
     // Pontuacao Inicial
     SCORE = 0;
 
@@ -148,12 +151,16 @@ static void render() {
     // Limpa o console
     clear();
 
-    // Contagem de Pontos
+    // Contagem de Vidas e Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES:");
     for (i = 1; i <= PLAYER_LIVES; i++) {
         mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ");
     }
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
+
+    // Configuracoes Audio
+    mvprintw(BORDER_AREA.y1 - 2, (WIN_SIZE.x / 2) - 4, "SOUNDS %s",
+             SOUNDS_ENABLED ? "ON" : "OFF");
 
 #ifdef DEBUG
     // Debug
@@ -192,6 +199,15 @@ static void getWorkingDirectory(char *buffer, size_t size) {
 
 static void getPressedKey() {
     PRESSED_KEY = getch();
+
+    // Tecla M para mutar/ativar os sons
+    if (PRESSED_KEY == 'm' || PRESSED_KEY == 'M') {
+        if (SOUNDS_ENABLED) {
+            SOUNDS_ENABLED = FALSE; // Desativa os sons
+        } else {
+            SOUNDS_ENABLED = TRUE;  // Ativa os sons
+        }
+    }
 }
 
 static void getWinSize() {
@@ -401,10 +417,13 @@ static void playSound(char *name) {
     // Baseado no tamanho maximo do path EXT | http://serverfault.com/questions/9546/filename-length-limits-on-linux
     char cmd[4096];
 
-    // Cria o comando
-    sprintf(cmd, "%s %s%s%s%s%s", SFX_COMMAND, WORKING_DIR, SFX_PATH, name, SFX_EXTENSION, " &"); // " &" no final roda o comando em background
+    if (SOUNDS_ENABLED) {
+        // Cria o comando
+        sprintf(cmd, "%s %s%s%s%s%s", SFX_COMMAND, WORKING_DIR, SFX_PATH, name, SFX_EXTENSION,
+                " &"); // " &" no final roda o comando em background
 
-    system(cmd);
+        system(cmd);
+    }
 }
 
 static void playerLife() {

@@ -144,6 +144,9 @@ area BORDER_AREA;
 // True para normal, false para gameover
 bool GAME_STATUS;
 
+// True para sons ativados, false para sons desativados
+bool SOUNDS_ENABLED;
+
 // Um timer global, eh incrementado a cada loop da funcao startSpaceInvaders()
 unsigned long int GLOBALTIME;
 
