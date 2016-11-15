@@ -243,8 +243,11 @@ static void drawBorder() {
     // Muda cor da borda para vermelho quando player for atingido
     if (BORDER[0] == 'X') {
         attron(COLOR_PAIR(2));
+    } else if (GAME_STATUS == FALSE){
+        attron(COLOR_PAIR(4)); // Borda verde caso o player ganhe o jogo
+        BORDER[0] = '+';
     } else {
-        attron(COLOR_PAIR(1));
+        attron(COLOR_PAIR(1)); // Borda amarela normal
     }
 
     // Bordas Verticais
