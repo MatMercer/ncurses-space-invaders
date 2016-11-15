@@ -470,10 +470,7 @@ static void playerLife() {
             PLAYER_LIVES -= 1;
 
             // Notifica que o player levou um hit
-
-            attron(COLOR_PAIR(4));
             BORDER[0] = 'X';
-            attroff(COLOR_PAIR(4));
 
             // Remove o laser colidido, evitando que o player perca mais de uma vida de uma vez
             LASER_POS[laser_index].x = -1;
