@@ -92,5 +92,9 @@ CTestTestfile.cmake
 **/crashlytics-build.properties
 **/fabric.properties
 
+# Ignore compiled space invaders
 spaceinvaders
 spacedebug
+
+# Ignore doxygen output
+**/doxygen/output/
