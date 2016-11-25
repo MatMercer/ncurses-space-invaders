@@ -92,4 +92,5 @@ CTestTestfile.cmake
 **/crashlytics-build.properties
 **/fabric.properties
 
-augusto/c/trabalhos/2_space_invaders/doxygen/output/*
+spaceinvaders
+spacedebug
