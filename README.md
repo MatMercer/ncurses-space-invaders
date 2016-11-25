@@ -9,7 +9,9 @@ mesmos elementos tirando as barreiras.
 
 # Elementos Principais
 
-Bordas / Cenário O caractere padrão da borda é  o ‘*’. As bordas são
+## Bordas / Cenário
+
+O caractere padrão da borda é  o ‘*’. As bordas são
 desenhadas centralizadas, com base no tamanho da janela (terminal) ao executar
 o jogo. Caso a janela seja menor do que o tamanho mínimo definido (90
 caracteres de largura e 45 caracteres de altura), as bordas serão desenhadas
