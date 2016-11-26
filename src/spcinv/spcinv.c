@@ -116,7 +116,7 @@ extern void startSpaceInvaders() {
     // Enquanto nao for gameover...
     while (GAME_STATUS) {
         // Volta a borda para o seu estado original, caso ela nao esteja
-        if (GLOBALTIME % 30 == 0) {
+        if (GLOBALTIME % 10 == 0) {
             BORDER[0] = '*';
         }
 
@@ -130,7 +130,7 @@ extern void startSpaceInvaders() {
         playerMovement();
         playerShoot();
 
-        if (GLOBALTIME % 8 == 0) {
+        if (GLOBALTIME % 3 == 0) {
             aliensMovement();
             aliensShoot();
         }
@@ -509,7 +509,7 @@ static void playerLife() {
 static void playerLaser() {
     // Movimenta o laser para cima se esta dentro das bordas
     if (LASER_POS[0].y > BORDER_AREA.y1) {
-        if (GLOBALTIME % 5 == 0) {
+        if (GLOBALTIME % 2 == 0) {
             LASER_POS[0].y -= 1;
         }
     } else {
@@ -656,7 +656,7 @@ static void gameOver(bool winner) {
         }
 
         // Movimenta a mensagem de gameover, verificando colisoes
-        if (GLOBALTIME % 25 == 0) {
+        if (GLOBALTIME % 8 == 0) {
             // Movimenta a msg com a direcao
             gmOverMsgPos.x += xMsgDir;
             gmOverMsgPos.y += yMsgDir / 2;
