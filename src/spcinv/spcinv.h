@@ -52,7 +52,7 @@
 /**
  * @brief Aonde os sfx estao
  */
-#define SFX_PATH "./spcinv/sfx/"
+#define SFX_PATH "./sfx/"
 
 /**
  * @brief Como eles sao tocados
