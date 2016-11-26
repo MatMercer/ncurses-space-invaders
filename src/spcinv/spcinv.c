@@ -158,7 +158,8 @@ static void render() {
     // Contagem de Vidas e Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES:");
     for (i = 1; i <= PLAYER_LIVES; i++) {
-        mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 3) + 4, "S2 ");
+        mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1 + (i * 4) + 4, " @");
+        mvprintw(BORDER_AREA.y1 - 1, BORDER_AREA.x1 + (i * 4) + 4, "@@@");
     }
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x2 - 9, "SCORE: %u", SCORE);
 
