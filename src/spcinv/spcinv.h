@@ -68,27 +68,27 @@
  * @brief Struct de posicao.
  */
 typedef struct position {
-    int x;
-    int y;
+    int x; /**< Posição x do console, 0 é esquerda. */
+    int y; /**< Posição y do console, 0 é a parte superior. */
 } vec2;
 
 /**
  * @brief Struct de area.
  */
 typedef struct areas {
-    int x1;
-    int x2;
-    int y1;
-    int y2;
+    int x1; /**< Coordenada X do canto superior esquerdo da area. */
+    int x2; /**< Coordenada X do canto inferior direito da area. */
+    int y1; /**< Coordenada Y do canto superior esquerdo da area. */
+    int y2; /**< Coordenada Y do canto inferior direito da area. */
 } area;
 
 /**
  * @brief Struct de componente, posicao, vivo ou morto e direcao.
  */
 typedef struct components {
-    vec2 pos;
-    bool isAlive;
-    int direction;
+    vec2 pos; /**< Posição do componente. */
+    bool isAlive; /**< Se o componente esta vivo. */
+    int direction; /**< Direção de movimento que este componente deve fazer no próximo frame */
 } component;
 
 /**
