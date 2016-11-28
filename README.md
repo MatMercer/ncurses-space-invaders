@@ -6,6 +6,23 @@ no Instituto Federal do Paraná campus Londrina. O jogo é inspirado no [Space
 Invaders Original](https://en.wikipedia.org/wiki/Space_Invaders) contendo os
 mesmos elementos tirando as barreiras.
 
+# Estrutura do código
+
+## Funções de inicialização
+Funções que começam com o nome "init"
+
+## Loop principal do jogo
+Todas as funções são chamadas dentro de um loop um loop principal e são
+divididas em duas categorias:
+
+* Funções de lógica do jogo.
+* Funções de renderização.
+
+A função render() renderiza todos os componentes do jogo. As funções de
+lógica são chamadas depois do render(), isso causa independência entre a
+renderização e física do jogo. O jogo funciona mesmo tendo um ou todos os
+componentes não renderizados.
+
 # Elementos Principais
 
 ## Bordas / Cenário
@@ -70,9 +87,9 @@ lasers) (player vs lasers).
 
 ## Game Over
 
-O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou perdendo. Em ambos os casos, uma mensagem
-animada de “Game Over” é mostrada na tela, informando a pontuação do player e
-se ele venceu ou não o jogo.
+O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou perdendo.
+Em ambos os casos, uma mensagem animada de “Game Over” é mostrada na tela,
+informando a pontuação do player e se ele venceu ou não o jogo.
 
 ### Vitória
 
