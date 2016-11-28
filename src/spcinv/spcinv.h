@@ -23,7 +23,7 @@
 /**
  * @brief Delay de cada frame
  */
-#define DELAY 35000
+#define DELAY 30000
 
 /**
  * @brief Pontuacao por alien atingido
