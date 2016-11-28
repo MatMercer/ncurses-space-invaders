@@ -21,23 +21,23 @@
 #include <sys/time.h>
 
 /**
- * @brief Delay de cada frame
+ * @brief Delay de cada frame.
  */
 #define DELAY 30000
 
 /**
- * @brief Pontuacao por alien atingido
+ * @brief Pontuacao por alien atingido.
  */
 #define KILL_SCORE 10
 
 /**
- * @brief Tamanho minimo da window
+ * @brief Tamanho minimo da window.
  */
 #define MIN_WINX 90
 #define MIN_WINY 45
 
 /**
- * @brief Macro para a direcao dos movimentos
+ * @brief Macro para a direcao dos movimentos.
  */
 #define RIGHT 1
 #define LEFT -1
@@ -45,27 +45,27 @@
 #define DOWN 2
 
 /**
- * @brief Define a quantidade de lasers no jogo
+ * @brief Define a quantidade de lasers no jogo.
  */
 #define MAX_LASERS 4
 
 /**
- * @brief Aonde os sfx estao
+ * @brief Aonde os sfx estao.
  */
 #define SFX_PATH "./sfx/"
 
 /**
- * @brief Como eles sao tocados
+ * @brief Como os sons sao tocados.
  */
 #define SFX_COMMAND "play -q"
 
 /**
- * @brief Qual extensão eles usam
+ * @brief Qual extensão eles usam.
  */
 #define SFX_EXTENSION ".wav"
 
 /**
- * @brief Struct de posicao
+ * @brief Struct de posicao.
  */
 typedef struct position {
     int x;
@@ -73,7 +73,7 @@ typedef struct position {
 } vec2;
 
 /**
- * @brief Struct de area
+ * @brief Struct de area.
  */
 typedef struct areas {
     int x1;
@@ -83,7 +83,7 @@ typedef struct areas {
 } area;
 
 /**
- * @brief Struct de componente, posicao, vivo ou morto e direcao
+ * @brief Struct de componente, posicao, vivo ou morto e direcao.
  */
 typedef struct components {
     vec2 pos;
@@ -92,214 +92,224 @@ typedef struct components {
 } component;
 
 /**
- * @brief Inicia o jogo e configura o ncurses
+ * @brief Inicia o jogo e configura o ncurses.
  */
 static void initGame();
 
 /**
- * @brief Define a posicao inicial do player
+ * @brief Define a posicao inicial do player.
  */
 static void initPlayer();
 
 /**
- * @brief Inicializa a matriz dos aliens
+ * @brief Inicializa a matriz dos aliens.
  */
 static void initAliens();
 
 /**
- * @brief Inicia os lasers nas suas posicoes
+ * @brief Inicia os lasers nas suas posicoes.
  */
 static void initLasers();
 
 /**
- * @brief Comeca o loop do jogo que chama as funcoes de movimento, acoes e colisoes
+ * @brief Comeca o loop do jogo que chama as funcoes de movimento, acoes e colisoes.
  */
 extern void startSpaceInvaders();
 
 /**
- * @brief Pega a tecla pressionada no momento e manda para PRESSED_KEY
+ * @brief Pega a tecla pressionada no momento e manda para PRESSED_KEY.
  */
 static void getPressedKey();
 
 /**
- * @brief Pega o tamanho da tela atual e manda para WIN_SIZE
+ * @brief Pega o tamanho da tela atual e manda para WIN_SIZE.
  */
 static void getWinSize();
 
 /**
- * @brief Para o jogo, mostrando uma mensagem se ganhou ou nao, para o ncurses apos isso
+ * @brief Para o jogo, mostrando uma mensagem se ganhou ou nao, para o ncurses apos isso.
  */
 static void gameOver(bool winner);
 
 /**
- * @brief Movimenta o player por meio de PLAYER_POS, acoes baseadas em PRESSED_KEY
+ * @brief Movimenta o player por meio de PLAYER_POS, acoes baseadas em PRESSED_KEY.
  */
 static void playerMovement();
 
 /**
- * @brief Movimenta os aliens, detecta colisoes com a parede e modifica o ALIENS_DIRECTION
+ * @brief Movimenta os aliens, detecta colisoes com a parede e modifica o ALIENS_DIRECTION.
  */
 static void aliensMovement();
 
 /**
- * @brief Detecta colisoes do player com os aliens ou lasers dos aliens
+ * @brief Detecta colisoes do player com os aliens ou lasers dos aliens.
  */
 static void playerLife();
 
 /**
- * @brief Verifica aliens vs lasers
+ * @brief Verifica aliens vs lasers.
  */
 static void aliensLife();
 
 /**
- * @brief Detecta se o jogador quer atirar e chama playerLaser()
+ * @brief Detecta se o jogador quer atirar e chama playerLaser().
  */
 static void playerShoot();
 
 /**
- * @brief Desenha os tiros dos aliens
+ * @brief Desenha os tiros dos aliens.
  */
 static void aliensShoot();
 
 /**
- * @brief Movimenta o laser do player
+ * @brief Movimenta o laser do player.
  */
 static void playerLaser();
 
 /**
- * @brief Renderiza e chama as funcoes draw*() a cada loop
+ * @brief Renderiza e chama as funcoes draw*() a cada loop.
  */
 static void render();
 
 /**
- * @brief Desenha as bordas do jogo e manda o tamanho da borda para BORDER_SIZE
+ * @brief Desenha as bordas do jogo e manda o tamanho da borda para BORDER_SIZE.
  */
 static void drawBorder();
 
 /**
- * @brief Desenha uma matriz de aliens
+ * @brief Desenha uma matriz de aliens.
  */
 static void drawAliens();
 
 /**
- * @brief Desenha um player na posicao dada
+ * @brief Desenha um player na posicao dada.
  */
 static void drawPlayer();
 
 /**
- * @brief Desenha os lasers em suas posicoes
+ * @brief Desenha os lasers em suas posicoes.
  */
 static void drawLasers();
 
 /**
- * @brief Movimenta um componente baseado em sua direcao se ele estiver vivo
+ * @brief Movimenta um componente baseado em sua direcao se ele estiver vivo.
  */
 static void moveComponent(component *comp);
 
 /**
- * @brief Usado para tocar um sfx
+ * @brief Usado para tocar um sfx.
  */
 static void playSound(char *name);
 
 /**
- * @brief Usado para descobrir aonde o executavel esta
+ * @brief Usado para descobrir aonde o executavel esta.
  *
  * Baseado em http://advancedlinuxprogramming.com/listings/chapter-7/get-exe-path.c
  */
 static void getWorkingDirectory (char* buffer, size_t size);
 
 /**
- * @brief Tamanho da tela
+ * @brief Tamanho da tela.
  */
 vec2 WIN_SIZE;
 
 /**
- * @brief Area da borda
+ * @brief Area da borda.
  */
 area BORDER_AREA;
 
 /**
- * @brief True para normal, false para gameover
+ * @brief True para normal, false para gameover.
  */
 bool GAME_STATUS;
 
 /**
- * @brief True para sons ativados, false para sons desativados
+ * @brief True para sons ativados, false para sons desativados.
  */
 bool SOUNDS_ENABLED;
 
 /**
- * @brief Um timer global, eh incrementado a cada loop da funcao startSpaceInvaders()
+ * @brief Um timer global, eh incrementado a cada loop da funcao startSpaceInvaders().
  */
 unsigned long int GLOBALTIME;
 
 /**
- * @brief Como a borda deve se parecer
+ * @brief Como a borda deve se parecer.
  */
 char BORDER[1];
 
 /**
- * @brief Posicao do player
+ * @brief Posicao do player.
  */
 vec2 PLAYER_POS;
 
 /**
- * @brief Diz se existe um disparo do player em andamento
+ * @brief Diz se existe um disparo do player em andamento.
  */
 bool IS_PLAYER_SHOOTING;
 
 /**
- * @brief Player possui vidas, que valem em colisoes com lasers
+ * @brief Player possui vidas, que valem em colisoes com lasers.
  */
 unsigned int PLAYER_LIVES;
 
 /**
- * @brief Qual tecla esta sendo pressionada no momento
+ * @brief Qual tecla esta sendo pressionada no momento.
  */
 int PRESSED_KEY;
 
 /**
- * @brief Score
+ * @brief Score.
  */
 unsigned int SCORE;
 
 /**
- * @brief Linhas e Colunas
+ * @brief Quantidade de linhas de aliens.
  */
-unsigned int ALIENS_ROWS, ALIENS_COLUMNS;
+unsigned int ALIENS_ROWS;
 
 /**
- * @brief Posicao dos aliens
+ * @brief Quantidade de colunas de aliens.
+ */
+unsigned int ALIENS_COLUMNS;
+
+/**
+ * @brief Posicao dos aliens.
+ *
+ * O tamanho desta matriz bidimencional é baseado no ALIENS_ROWS e ALIENS_COLUMNS.
  */
 component **ALIENS;
 
 /**
- * @brief Direcao dos aliens, muda de acordo com as colisoes
+ * @brief Direcao dos aliens, muda de acordo com as colisoes com as bordas.
+ *
+ * Quando algun alien toca na borda direita, todos vao para baixo no proximo frame e
+ * depois para a esquerda.
  */
 int ALIENS_DIRECTION;
 
 /**
- * @brief Armazena o indice da ultima fileira de aliens e ultimo alien
+ * @brief Armazena o indice da ultima fileira de aliens e ultimo alien.
  */
 unsigned int LAST_ALIVE_ROW, LAST_ALIVE_ALIEN;
 
 /**
- * @brief Posicao dos lasers
+ * @brief Posicao dos lasers.
  */
 vec2 LASER_POS[MAX_LASERS];
 
 /**
- * @brief Usado para estocar o diretorio atual do executavel
+ * @brief Usado para estocar o diretorio atual do executavel.
  *
- * 4096 é baseado no tamanho máximo de bytes que um filepath pode ter no sistema de arquivos EXT
+ * O tamanho 4096 é baseado no tamanho máximo de bytes que um filepath pode ter no sistema de arquivos EXT.
  */
 char WORKING_DIR[4096];
 
-/**
- * @brief Usado para debug
- */
 #ifdef DEBUG
 
+/**
+ * @brief Função usada para mostrar dados do jogo no executável de debug.
+ */
 static void drawDebug();
 
 #endif // DEBUG
