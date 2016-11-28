@@ -341,9 +341,9 @@ char *dirToString(int dir) {
 }
 
 static void drawDebug() {
-    mvprintw(BORDER_AREA.y1 - 8, BORDER_AREA.x1, "WINDOW SIZE: %d:%d\t\tBORDER AREA: %d:%d:%d:%d \tGLOBALTIME: %ld ",
+    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "WINDOW SIZE: %d:%d\t\tBORDER AREA: %d:%d:%d:%d \tGLOBALTIME: %ld ",
              WIN_SIZE.x, WIN_SIZE.y, BORDER_AREA.x1, BORDER_AREA.x2, BORDER_AREA.y1, BORDER_AREA.y2, GLOBALTIME);
-    mvprintw(BORDER_AREA.y1 - 6, BORDER_AREA.x1, "LAST ROW/LAST ALIEN: %u:%u\t\tPRESSED KEY: %d \t\tPLAYER POS: %d:%d",
+    mvprintw(BORDER_AREA.y1 - 5, BORDER_AREA.x1, "LAST ROW/LAST ALIEN: %u:%u\t\tPRESSED KEY: %d \t\tPLAYER POS: %d:%d",
              LAST_ALIVE_ROW, LAST_ALIVE_ALIEN, PRESSED_KEY, PLAYER_POS.x, PLAYER_POS.y);
     mvprintw(BORDER_AREA.y1 - 4, BORDER_AREA.x1, "ALIENS DIRECTION: %s\t\tLASER POS: %d:%d \t\tGAME STATUS: %d",
              dirToString(ALIENS_DIRECTION), LASER_POS[0].x, LASER_POS[0].y, GAME_STATUS);
