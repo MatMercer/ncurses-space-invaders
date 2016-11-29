@@ -9,34 +9,39 @@ mesmos elementos tirando as barreiras.
 # Estrutura do código
 
 ## Funções de inicialização
-Funções que começam com o nome "init"
+
+Funções que começam com o nome "init" são usadas para inicializar os
+componentes do jogo, por exemplo a função initAliens() aloca a matriz de
+aliens e os coloca na posição inicial correta. A função de inicialização
+principal é a initGame(), ao qual inicia o ncurses.
 
 ## Loop principal do jogo
-Todas as funções são chamadas dentro de um loop um loop principal e são
-divididas em duas categorias:
+
+Todas as funções são chamadas dentro de um loop um loop principal na função
+startSpaceInvaders() e são divididas em duas categorias:
 
 * Funções de lógica do jogo.
 * Funções de renderização.
 
-A função render() renderiza todos os componentes do jogo. As funções de
-lógica são chamadas depois do render(), isso causa independência entre a
-renderização e física do jogo. O jogo funciona mesmo tendo um ou todos os
-componentes não renderizados.
+A função render() renderiza todos os componentes do jogo. As funções de lógica
+são chamadas depois do render() dentro da função startSpaceInvaders(), isso
+causa independência entre a renderização e física do jogo. O jogo funciona
+mesmo tendo um ou todos os componentes não renderizados.
 
 # Elementos Principais
 
 ## Bordas / Cenário
 
-O caractere padrão da borda é o '\*'. As bordas são
-desenhadas centralizadas, com base no tamanho da janela (terminal) ao executar
-o jogo. Caso a janela seja menor do que o tamanho mínimo definido (90
-caracteres de largura e 45 caracteres de altura), as bordas serão desenhadas
-de acordo com o espaço mínimo.
+O caractere padrão da borda é o '\*'. As bordas são desenhadas centralizadas,
+com base no tamanho da janela (terminal) ao executar o jogo. Caso a janela
+seja menor do que o tamanho mínimo definido (90 caracteres de largura e 45
+caracteres de altura), as bordas serão desenhadas de acordo com o espaço
+mínimo.
 
 A borda padrão é da cor amarela, caso o player perca uma vida a borda torna-se
 vermelha e o caractere ‘\*’ é substituído por ‘X’. Em caso de vitória do
-jogador, a borda torna-se verde e o caractere ‘\*’ é substituído por ‘+’. Todos
-os caracteres do jogo são impressos na tela em negrito e cada componente
+jogador, a borda torna-se verde e o caractere ‘\*’ é substituído por ‘+’.
+Todos os caracteres do jogo são impressos na tela em negrito e cada componente
 possui uma cor diferente.
 
 
@@ -68,10 +73,19 @@ acertar um alien ou ao atingir a borda superior. Elementos Secundários Sons
 ## Sons
 
 Existem diversos efeitos sonoros no jogo, os quais melhoram consideravelmente
-a experiência do usuário e até mesmo a jogabilidade. A tecla ‘M’ é
-utilizada para ativar ou desativar os sons do jogo.
+a experiência do usuário e até mesmo a jogabilidade. A tecla ‘M’ é utilizada
+para ativar ou desativar os sons do jogo. Os sons são tocados com o comando
+play a partir da função playSound(). Por padrão o formato deles é em .wav e o
+comando chamado para tocar tem o seguinte formato:
 
-Os sons foram gerados por Gabriel Ranea a partir do site
+* play -q {caminho do executável}/sfx/{nome do arquivo}{extensão} &
+
+A função getWorkingDirectory() é crucial para esse comando funcionar pois ela
+encontra o caminho do executavel. A parte final desse comando '&' faz com que
+ele seja executado em *background*, evitando que o jogo pause quando um som é
+tocado.
+
+Os sons foram gerados pelo Gabriel Ranea a partir do site
 [SuperFlashBros](http://www.superflashbros.net/as3sfxr/).
 
 ## Score
@@ -85,11 +99,17 @@ conferir sua pontuação no canto superior direito do jogo e na tela final de
 As colisões são detectadas a partir das posições X e Y dos itens (aliens vs
 lasers) (player vs lasers).
 
+## Vidas
+
+O jogador começa com 3 vidas, que são mostradas no canto superior esquerdo da
+tela. Toda vez que o jogador sofre um dano de algum laser de um alien a vida é
+decrementada.
+
 ## Game Over
 
 O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou perdendo.
 Em ambos os casos, uma mensagem animada de “Game Over” é mostrada na tela,
-informando a pontuação do player e se ele venceu ou não o jogo.
+informando a pontuação do player e se ele venceu ou não o jogo. O jogador pode escolher sair do jogo ou reiniciar. A forma como de como o jogo reinicia é bem simples pois é só uma chamada para a função startSpaceInvaders().
 
 ### Vitória
 
@@ -100,7 +120,16 @@ vencer o jogo.
 
 ### Derrota
 
-O jogo é encerrado de 3 maneiras:
-* Se o player não tiver mais vidas.
-* Se algum alien tocar a borda inferior.
-* Se algum alien tocar o player.
+O jogador é derrotado se:
+
+* O player não tiver mais vidas.
+* Algum alien tocar a borda inferior.
+* Algum alien tocar o player.
+
+# Conclusão
+
+O desenvolvimento deste jogo foi muito importante para a nossa experiência
+pois tivemos o contato com tecnologias que não tinhamos o conhecimento prévio
+como Makefile, CMake, Clion, e Doxygen. Além disso, devido ao fato de que este
+programa foi feito para o SO Linux, obtivemos um conhecimento mais aprofundado
+sobre como esse sistema funciona e sobre ferramentas via shell.
