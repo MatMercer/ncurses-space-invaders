@@ -55,8 +55,7 @@ aliens descem uma posição no sentido vertical após as colisões laterais.
 Cada alien tem uma variável do tipo boolean que informa seu estado de vida. Os
 aliens possuem três lasers, os quais são gerados randomicamente com o mesmo
 intervalo de tempo do movimento dos aliens. Apenas o último alien de cada
-coluna pode atirar. Caso a coluna gerada esteja vazia, o laser será
-redirecionado para o último alien da última coluna (mais próxima do player).
+coluna pode atirar.
 
 
 ## Nave do Jogador
