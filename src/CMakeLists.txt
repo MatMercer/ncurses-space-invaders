@@ -19,7 +19,7 @@ target_link_libraries(spaceinvaders ${CURSES_LIBRARIES})
 add_executable(spacedebug ${SOURCES})
 target_link_libraries(spacedebug ${CURSES_LIBRARIES})
 # Define the DEBUG flag for debug
-set_target_properties (spacedebug PROPERTIES COMPILE_DEFINITIONS "DEBUG")
+set_target_properties(spacedebug PROPERTIES COMPILE_DEFINITIONS "DEBUG")
 
 # Send the sound effects to bin folder
 FILE(COPY ./spcinv/sfx DESTINATION ../bin/)

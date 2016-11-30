@@ -206,7 +206,7 @@ static void playSound(char *name);
  *
  * Baseado em http://advancedlinuxprogramming.com/listings/chapter-7/get-exe-path.c
  */
-static void getWorkingDirectory (char* buffer, size_t size);
+static void getWorkingDirectory(char *buffer, size_t size);
 
 /**
  * @brief Tamanho da tela.
