@@ -289,11 +289,6 @@ component **ALIENS;
 int ALIENS_DIRECTION;
 
 /**
- * @brief Armazena o indice da ultima fileira de aliens e ultimo alien.
- */
-unsigned int LAST_ALIVE_ROW, LAST_ALIVE_ALIEN;
-
-/**
  * @brief Posicao dos lasers.
  */
 vec2 LASER_POS[MAX_LASERS];
