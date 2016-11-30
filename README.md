@@ -20,8 +20,7 @@ principal é a initGame(), ao qual inicia o ncurses.
 Todas as funções são chamadas dentro de um loop um loop principal na função
 startSpaceInvaders() e são divididas em duas categorias:
 
-* Funções de lógica do jogo.
-* Funções de renderização.
+* Funções de lógica do jogo. Funções de renderização.
 
 A função render() renderiza todos os componentes do jogo. As funções de lógica
 são chamadas depois do render() dentro da função startSpaceInvaders(), isso
@@ -83,7 +82,10 @@ comando chamado para tocar tem o seguinte formato:
 A função getWorkingDirectory() é crucial para esse comando funcionar pois ela
 encontra o caminho do executavel. A parte final desse comando '&' faz com que
 ele seja executado em *background*, evitando que o jogo pause quando um som é
-tocado.
+tocado. O comando play esta disponivel em diferentes distribuições linux pelo
+pacote sox. Então o comando para fazer a instalação deste pacote é simples:
+
+* sudo apt-get install sox
 
 Os sons foram gerados pelo Gabriel Ranea a partir do site
 [SuperFlashBros](http://www.superflashbros.net/as3sfxr/).
@@ -97,39 +99,43 @@ conferir sua pontuação no canto superior direito do jogo e na tela final de
 ## Colisões
 
 As colisões são detectadas a partir das posições X e Y dos itens (aliens vs
-lasers) (player vs lasers).
+lasers) (player vs lasers). Por exemplo, todos os aliens fazem a verificação
+se um laser do jogador encostou nele, caso isso ocorra, ele não é mais
+renderizado e não se move mais.
 
 ## Vidas
 
 O jogador começa com 3 vidas, que são mostradas no canto superior esquerdo da
-tela. Toda vez que o jogador sofre um dano de algum laser de um alien a vida é
+tela. Toda vez que o jogador sofre um dano de algum laser sua vida é
 decrementada.
 
 ## Game Over
 
-O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou perdendo.
-Em ambos os casos, uma mensagem animada de “Game Over” é mostrada na tela,
-informando a pontuação do player e se ele venceu ou não o jogo. O jogador pode escolher sair do jogo ou reiniciar. A forma como de como o jogo reinicia é bem simples pois é só uma chamada para a função startSpaceInvaders().
+O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou
+perdendo. Em ambos os casos, uma mensagem animada de “Game Over” é mostrada na
+tela, informando a pontuação do player e se ele venceu ou não o jogo. O
+jogador pode escolher sair do jogo ou reiniciar. A forma como de como o jogo
+reinicia é bem simples pois é só uma chamada para a função
+startSpaceInvaders().
 
 ### Vitória
 
-O jogador só vence se todos os aliens forem eliminados. A verificação é feita com base
-no score do player em comparação com a quantidade de aliens multiplicada pela
-pontuação de cada alien abatido. Ex: 25 aliens x 10 pontos = 250 pontos para
-vencer o jogo.
+O jogador só vence se todos os aliens forem eliminados. A verificação é feita
+com base no score do player em comparação com a quantidade de aliens
+multiplicada pela pontuação de cada alien abatido. Ex: 25 aliens x 10 pontos =
+250 pontos para vencer o jogo.
 
 ### Derrota
 
 O jogador é derrotado se:
 
-* O player não tiver mais vidas.
-* Algum alien tocar a borda inferior.
-* Algum alien tocar o player.
+* O player não tiver mais vidas. Algum alien tocar a borda inferior. Algum
+* alien tocar o player.
 
 # Conclusão
 
 O desenvolvimento deste jogo foi muito importante para a nossa experiência
 pois tivemos o contato com tecnologias que não tinhamos o conhecimento prévio
-como Makefile, CMake, Clion, e Doxygen. Além disso, devido ao fato de que este
+como Makefile, CMake, Clion, Doxygen. Além disso, devido ao fato de que este
 programa foi feito para o SO Linux, obtivemos um conhecimento mais aprofundado
-sobre como esse sistema funciona e sobre ferramentas via shell.
+sobre como esse sistema funciona e sobre as ferramentas via shell.
