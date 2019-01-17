@@ -1,140 +1,138 @@
-# Sobre o projeto
+# About the project
 
-Space Invaders é um jogo proposto como forma de trabalho pelo professor
-[Augusto Luengo Pereira Nunes](http://www.inf.ufrgs.br/~alpnunes/index.html)
-no Instituto Federal do Paraná campus Londrina. O jogo é inspirado no [Space
-Invaders Original](https://en.wikipedia.org/wiki/Space_Invaders) contendo os
-mesmos elementos tirando as barreiras.
+Space Invaders is a game proposed as a college assignment for the teacher
+[Augusto Luengo Pereira Nunes] (http://www.inf.ufrgs.br/~alpnunes/index.html)
+at the Federal Institute of Paraná Londrina. The game is inspired by [The Original Space Invaders] (https://en.wikipedia.org/wiki/Space_Invaders) containing
+all the same elements, less barriers.
 
-# Estrutura do código
+# Code structure
 
-## Funções de inicialização
+## Boot Functions
 
-Funções que começam com o nome "init" são usadas para inicializar os
-componentes do jogo, por exemplo a função initAliens() aloca a matriz de
-aliens e os coloca na posição inicial correta. A função de inicialização
-principal é a initGame(), ao qual inicia o ncurses.
+Functions that begin with the name "init" are used to initialize the
+components of the game, for example the `initAliens()` function allocates the
+aliens and places them in the correct starting position. The startup main function
+is the `initGame(),` which the ncurses starts.
 
-## Loop principal do jogo
+## Main Game Loop
 
-Todas as funções são chamadas dentro de um loop um loop principal na função
-startSpaceInvaders() e são divididas em duas categorias:
+All functions are called within a loop ta the main loop in the function
+`startSpaceInvaders()` and are divided into two categories:
 
-* Funções de lógica do jogo. Funções de renderização.
+* Game logic functions.
+* Rendering Functions.
 
-A função render() renderiza todos os componentes do jogo. As funções de lógica
-são chamadas depois do render() dentro da função startSpaceInvaders(), isso
-causa independência entre a renderização e física do jogo. O jogo funciona
-mesmo tendo um ou todos os componentes não renderizados.
+The `render()` function renders all the components of the game. Logic Functions
+are called after `render()` within the `startSpaceInvaders()` function, this
+causes independence between the rendering and physics of the game. The game works
+even though one or all of the components are not rendered.
 
-# Elementos Principais
+# Main Elements
 
-## Bordas / Cenário
+## Borders / Scenery
 
-O caractere padrão da borda é o '\*'. As bordas são desenhadas centralizadas,
-com base no tamanho da janela (terminal) ao executar o jogo. Caso a janela
-seja menor do que o tamanho mínimo definido (90 caracteres de largura e 45
-caracteres de altura), as bordas serão desenhadas de acordo com o espaço
-mínimo.
+The default character of the border is `*`. The edges are drawn centrally,
+based on the window size (terminal) when running the game. If the window
+is smaller than the minimum size set (90 characters wide and 45 characters wide
+height characters), the borders will be drawn according to the mininum size.
 
-A borda padrão é da cor amarela, caso o player perca uma vida a borda torna-se
-vermelha e o caractere ‘\*’ é substituído por ‘X’. Em caso de vitória do
-jogador, a borda torna-se verde e o caractere ‘\*’ é substituído por ‘+’.
-Todos os caracteres do jogo são impressos na tela em negrito e cada componente
-possui uma cor diferente.
+The default border is yellow, in case the player loses a life the edge becomes
+red and the character `*` is replaced by `X`. In case of victory, the border becomes green 
+and the character `*` is replaced by `+`.
+All characters in the game are printed bold on the screen and each component
+has a different color.
 
 
 ## Aliens
 
-Os aliens movem-se de forma conjunta e uniforme, automaticamente, após um
-certo intervalo de tempo. Esse intervalo é baseado em uma variável, a qual
-incrementa a cada loop do jogo. Os movimentos começam para a direita e mudam a
-direção horizontal após cada colisão com as bordas laterais. Além disso, os
-aliens descem uma posição no sentido vertical após as colisões laterais.
+The aliens move together and uniformly, automatically, after a
+certain interval of time. This interval is based on a variable.
+The movements start to the right and change the
+horizontal direction after each collision with the lateral edges. In addition, the
+aliens descend a vertical position after collisions.
 
-Cada alien tem uma variável do tipo boolean que informa seu estado de vida. Os
-aliens possuem três lasers, os quais são gerados randomicamente com o mesmo
-intervalo de tempo do movimento dos aliens. Apenas o último alien de cada
-coluna pode atirar.
+Each alien has a boolean type variable that informs its state of life. The
+aliens have three lasers, which are generated randomly with the same
+movement interval of the aliens. Only the last alien in each
+column can shoot.
 
+## Player Spaceship
 
-## Nave do Jogador
+The starting position of the player is centered just above the bottom edge.
+The player's ship is moved by the keyboard arrows, which control the
+the player.
 
-A posição inicial do player é centralizada, logo acima da borda inferior. A
-nave do jogador é movimentada pelas setas do teclado, que controlam a posição
-horizontal do player.
+The laser in the player is activated with the space key and can can only
+be shoot one at a time. The shooting ends with the
+hit of an alien or a hit from the top edge.
 
-O laser do player é ativado com a tecla espaço e só poderá ser atirado se não
-houver nenhum outro disparo do player em andamento. O disparo é finalizado ao
-acertar um alien ou ao atingir a borda superior. Elementos Secundários Sons
+## Sound
 
-## Sons
+There are various sound effects in the game, which improve considerably
+the user experience and even the gameplay. The 'M' key is used
+to turn the game sounds on or off. The sounds are played with the
+`playSound()` function. By default their format is a `.wav` and the
+command to play has the following format:
 
-Existem diversos efeitos sonoros no jogo, os quais melhoram consideravelmente
-a experiência do usuário e até mesmo a jogabilidade. A tecla ‘M’ é utilizada
-para ativar ou desativar os sons do jogo. Os sons são tocados com o comando
-play a partir da função playSound(). Por padrão o formato deles é em .wav e o
-comando chamado para tocar tem o seguinte formato:
+    play -q {executable path} / sfx / {file name} {extension} &
 
-* play -q {caminho do executável}/sfx/{nome do arquivo}{extensão} &
+The `getWorkingDirectory()` function is crucial for this command to work because it
+finds the path of the executable. The final part of this `&` command causes
+it to run on a differente proccess, preventing the game from pausing when a sound is
+touched. The play command is available in different linux distributions by the
+`sox` package. So the command to install this package on debian based distributions is simple:
 
-A função getWorkingDirectory() é crucial para esse comando funcionar pois ela
-encontra o caminho do executavel. A parte final desse comando '&' faz com que
-ele seja executado em *background*, evitando que o jogo pause quando um som é
-tocado. O comando play esta disponivel em diferentes distribuições linux pelo
-pacote sox. Então o comando para fazer a instalação deste pacote é simples:
+    $ apt-get install sox
 
-* sudo apt-get install sox
-
-Os sons foram gerados pelo Gabriel Ranea a partir do site
-[SuperFlashBros](http://www.superflashbros.net/as3sfxr/).
+The sounds were generated by Gabriel Ranea from the website
+[SuperFlashBros] (http://www.superflashbros.net/as3sfxr/).
 
 ## Score
 
-O score é incrementado em 10 pontos a cada alien eliminado. O jogador pode
-conferir sua pontuação no canto superior direito do jogo e na tela final de
-“Game Over”.
+The score is incremented by 10 points for each alien eliminated. The player can
+score is in the upper right corner of the game and the final screen of
+"Game over".
 
-## Colisões
+## Collisions
 
-As colisões são detectadas a partir das posições X e Y dos itens (aliens vs
-lasers) (player vs lasers). Por exemplo, todos os aliens fazem a verificação
-se um laser do jogador encostou nele, caso isso ocorra, ele não é mais
-renderizado e não se move mais.
+The collisions are detected from the `X` and `Y` positions of the items (aliens vs.
+lasers) (player vs. lasers). For example, all aliens check
+if a player's laser touched it, in case it occurs, it is no longer
+rendered and does not move anymore.
 
-## Vidas
+## Lives
 
-O jogador começa com 3 vidas, que são mostradas no canto superior esquerdo da
-tela. Toda vez que o jogador sofre um dano de algum laser sua vida é
-decrementada.
+The player starts with 3 lives, which are shown in the upper left corner of the
+screen. Every time the player suffers damage from a laser his life is
+decremented by 1.
 
-## Game Over
+## Game over
 
-O jogo pode ser encerrado de duas maneiras, com o jogador ganhando ou
-perdendo. Em ambos os casos, uma mensagem animada de “Game Over” é mostrada na
-tela, informando a pontuação do player e se ele venceu ou não o jogo. O
-jogador pode escolher sair do jogo ou reiniciar. A forma como de como o jogo
-reinicia é bem simples pois é só uma chamada para a função
-startSpaceInvaders().
+The game can be closed in two ways, with the player winning or
+losing. In both cases, an animated "Game Over" message is shown in the
+screen, informing the score of the player and whether or not he won the game. The
+player may choose to quit the game or restart.
 
-### Vitória
+### Victory
 
-O jogador só vence se todos os aliens forem eliminados. A verificação é feita
-com base no score do player em comparação com a quantidade de aliens
-multiplicada pela pontuação de cada alien abatido. Ex: 25 aliens x 10 pontos =
-250 pontos para vencer o jogo.
+The player only wins if all aliens are eliminated. Verification is done
+based on the player's score compared to the amount of aliens
+multiplied by the score of each slaughtered alien. Ex: 25 aliens x 10 points =
+250 points to win the game.
 
-### Derrota
+### Defeat
 
-O jogador é derrotado se:
+The player is defeated if:
 
-* O player não tiver mais vidas. Algum alien tocar a borda inferior. Algum
-* alien tocar o player.
+* The player has no more lives. 
+* Any alien touch the bottom edge.
+* Any alien touch the player.
 
-# Conclusão
+# Conclusion
 
-O desenvolvimento deste jogo foi muito importante para a nossa experiência
-pois tivemos o contato com tecnologias que não tinhamos o conhecimento prévio
-como Makefile, CMake, Clion, Doxygen. Além disso, devido ao fato de que este
-programa foi feito para o SO Linux, obtivemos um conhecimento mais aprofundado
-sobre como esse sistema funciona e sobre as ferramentas via shell.
+The development of this game was very important to our experience.
+because we had contact with technologies that we did not have prior knowledge.
+Such as Makefile, CMake, Clion and Doxygen. In addition, due to the fact that this
+program was made for Linux OS, we gained a deeper understanding of the
+on how this system works.
+
