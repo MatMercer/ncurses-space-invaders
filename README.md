@@ -1,8 +1,8 @@
 # About the project
 
 Space Invaders is a game proposed as a college assignment for the teacher
-[Augusto Luengo Pereira Nunes] (http://www.inf.ufrgs.br/~alpnunes/index.html)
-at the Federal Institute of Paraná Londrina. The game is inspired by [The Original Space Invaders] (https://en.wikipedia.org/wiki/Space_Invaders) containing
+[Augusto Luengo Pereira Nunes](http://www.inf.ufrgs.br/~alpnunes/index.html)
+at the Federal Institute of Paraná Londrina. The game is inspired by [The Original Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders) containing
 all the same elements, less barriers.
 
 # Code structure
