@@ -1,3 +1,21 @@
+![https://media.giphy.com/media/kE3oC5w82b9Qt1MQkW/giphy.gif]()
+
+# Compiling:
+
+    # Install sox (avaible in all major linux distros)
+    pacman -S sox
+    
+    # Clone the repo
+    git clone https://github.com/MatMercer/ncurses-space-invaders.git
+    cd ncurses-space-invaders
+    
+    # Generate the build files and compile
+    cmake .
+    make
+    # Play the game
+    ./bin/spaceinvaders
+    ./bin/spacedebug # Debug version
+
 # About the project
 
 Space Invaders is a game proposed as a college assignment for the teacher
