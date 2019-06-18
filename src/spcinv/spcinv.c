@@ -153,7 +153,7 @@ static void render() {
     int i;
 
     // Limpa o console
-    clear();
+    erase();
 
     // Contagem de Vidas e Pontos
     mvprintw(BORDER_AREA.y1 - 2, BORDER_AREA.x1, "LIVES:");
@@ -632,7 +632,7 @@ static void gameOver(bool winner) {
         getPressedKey();
 
         // Limpa o console
-        clear();
+        erase();
 
         // Debug
 #ifdef DEBUG
