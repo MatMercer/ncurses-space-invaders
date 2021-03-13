@@ -211,74 +211,74 @@ static void getWorkingDirectory(char *buffer, size_t size);
 /**
  * @brief Tamanho da tela.
  */
-vec2 WIN_SIZE;
+extern vec2 WIN_SIZE;
 
 /**
  * @brief Area da borda.
  */
-area BORDER_AREA;
+extern area BORDER_AREA;
 
 /**
  * @brief True para normal, false para gameover.
  */
-bool GAME_STATUS;
+extern bool GAME_STATUS;
 
 /**
  * @brief True para sons ativados, false para sons desativados.
  */
-bool SOUNDS_ENABLED;
+extern bool SOUNDS_ENABLED;
 
 /**
  * @brief Um timer global, eh incrementado a cada loop da funcao startSpaceInvaders().
  */
-unsigned long int GLOBALTIME;
+extern unsigned long int GLOBALTIME;
 
 /**
  * @brief Como a borda deve se parecer.
  */
-char BORDER[1];
+extern char BORDER[1];
 
 /**
  * @brief Posicao do player.
  */
-vec2 PLAYER_POS;
+extern vec2 PLAYER_POS;
 
 /**
  * @brief Diz se existe um disparo do player em andamento.
  */
-bool IS_PLAYER_SHOOTING;
+extern bool IS_PLAYER_SHOOTING;
 
 /**
  * @brief Player possui vidas, que valem em colisoes com lasers.
  */
-unsigned int PLAYER_LIVES;
+extern unsigned int PLAYER_LIVES;
 
 /**
  * @brief Qual tecla esta sendo pressionada no momento.
  */
-int PRESSED_KEY;
+extern int PRESSED_KEY;
 
 /**
  * @brief Score.
  */
-unsigned int SCORE;
+extern unsigned int SCORE;
 
 /**
  * @brief Quantidade de linhas de aliens.
  */
-unsigned int ALIENS_ROWS;
+extern unsigned int ALIENS_ROWS;
 
 /**
  * @brief Quantidade de colunas de aliens.
  */
-unsigned int ALIENS_COLUMNS;
+extern unsigned int ALIENS_COLUMNS;
 
 /**
  * @brief Posicao dos aliens.
  *
  * O tamanho desta matriz bidimencional é baseado no ALIENS_ROWS e ALIENS_COLUMNS.
  */
-component **ALIENS;
+extern component **ALIENS;
 
 /**
  * @brief Direcao dos aliens, muda de acordo com as colisoes com as bordas.
@@ -286,19 +286,19 @@ component **ALIENS;
  * Quando algun alien toca na borda direita, todos vao para baixo no proximo frame e
  * depois para a esquerda.
  */
-int ALIENS_DIRECTION;
+extern int ALIENS_DIRECTION;
 
 /**
  * @brief Posicao dos lasers.
  */
-vec2 LASER_POS[MAX_LASERS];
+extern vec2 LASER_POS[MAX_LASERS];
 
 /**
  * @brief Usado para estocar o diretorio atual do executavel.
  *
  * O tamanho 4096 é baseado no tamanho máximo de bytes que um filepath pode ter no sistema de arquivos EXT.
  */
-char WORKING_DIR[4096];
+extern char WORKING_DIR[4096];
 
 #ifdef DEBUG
 
