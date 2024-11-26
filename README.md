@@ -1,4 +1,4 @@
-![https://media.giphy.com/media/kE3oC5w82b9Qt1MQkW/giphy.gif](https://media.giphy.com/media/kE3oC5w82b9Qt1MQkW/giphy.gif)
+![./recording.gif](./recording.gif)
 
 # Compiling:
 
