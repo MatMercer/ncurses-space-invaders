@@ -2,6 +2,25 @@
 #include <string.h>
 #include "spcinv.h"
 
+// Define global variables
+area BORDER_AREA;
+unsigned int SCORE = 0;
+int PRESSED_KEY;
+unsigned long int GLOBALTIME = 0;
+bool GAME_STATUS = true;
+bool SOUNDS_ENABLED = true;
+vec2 PLAYER_POS = {0, 0};
+bool IS_PLAYER_SHOOTING = false;
+unsigned int PLAYER_LIVES = 3;
+unsigned int ALIENS_ROWS = 0;
+unsigned int ALIENS_COLUMNS = 0;
+component **ALIENS;
+int ALIENS_DIRECTION = 0;
+vec2 LASER_POS[MAX_LASERS];
+char WORKING_DIR[4096];
+char BORDER[1];
+vec2 WIN_SIZE;
+
 
 static void initGame() {
     // Pega o local do executavel
