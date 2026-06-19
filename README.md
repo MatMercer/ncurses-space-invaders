@@ -2,19 +2,38 @@
 
 # Compiling:
 
-    # Install sox (avaible in all major linux distros)
-    pacman -S sox
-    
+## Ubuntu / Debian
+
+    # Install the build tools and dependencies
+    sudo apt-get update
+    sudo apt-get install cmake g++ build-essential sox libncurses-dev
+
     # Clone the repo
     git clone https://github.com/MatMercer/ncurses-space-invaders.git
     cd ncurses-space-invaders
-    
+
     # Generate the build files and compile
     cmake .
     make
+
     # Play the game
-    ./bin/spaceinvaders
-    ./bin/spacedebug # Debug version
+    ./bin/ncurses-space-invaders
+
+## Arch Linux
+
+    # Install the build tools and dependencies
+    sudo pacman -S cmake gcc base-devel sox ncurses
+
+    # Clone the repo
+    git clone https://github.com/MatMercer/ncurses-space-invaders.git
+    cd ncurses-space-invaders
+
+    # Generate the build files and compile
+    cmake .
+    make
+
+    # Play the game
+    ./bin/ncurses-space-invaders
 
 # About the project
 

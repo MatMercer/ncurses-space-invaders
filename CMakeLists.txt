@@ -17,10 +17,11 @@ file(COPY src/spcinv/sfx DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sfx)
 # Space Invaders Library
 file(GLOB spcinv_SOURCES src/spcinv/*.c)
 add_library(spcinv STATIC ${spcinv_SOURCES})
+target_link_libraries(spcinv ${CURSES_LIBRARIES})
 
 # Space Invaders Main Source Code
 file(GLOB ncurses_space_invaders_SOURCES src/*.c)
 add_executable(ncurses-space-invaders ${ncurses_space_invaders_SOURCES})
 
 # Link libraries to the main executable
-target_link_libraries(ncurses-space-invaders ${CURSES_LIBRARY} spcinv)
+target_link_libraries(ncurses-space-invaders spcinv ${CURSES_LIBRARIES})
